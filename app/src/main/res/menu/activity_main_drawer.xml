@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="TRANG CHỦ" />
+        <item
+            android:id="@+id/nav_nam"
+            android:icon="@drawable/ic_giay_nam"
+            android:title="GIÀY NAM" />
+        <item
+            android:id="@+id/nav_nu"
+            android:icon="@drawable/ic_giay_nu"
+            android:title="GIÀY NỮ" />
+        <item
+            android:id="@+id/nav_sandal"
+            android:icon="@drawable/ic_sandal"
+            android:title="SANDAL - DÉP" />
+        <item
+            android:id="@+id/nav_other"
+            android:icon="@drawable/ic_more_horiz_black_24dp"
+            android:title="PHỤ KIỆN KHÁC" />
+    </group>
+
+    <item android:title="Tùy chọn khác">
+        <menu>
+            <item
+                android:id="@+id/nav_drawer_acc"
+                android:icon="@drawable/ic_account_circle_black_24dp"
+                android:title="TÀI KHOẢN" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="CÀI ĐẶT" />
+        </menu>
+    </item>
+
+</menu>
