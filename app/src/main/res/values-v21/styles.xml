@@ -5,4 +5,15 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="AppTheme" parent="android:Theme.Material.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">?attr/colorButtonNormal</item>
+        <item name="android:colorPrimary">@color/primary_material_dark</item>
+        <item name="android:textColorPrimary">@android:color/background_light</item>
+        <item name="android:colorForeground">@android:color/background_light</item>
+        <!--<item name="selectableItemBackground">#000000</item>-->
+    </style>
 </resources>
