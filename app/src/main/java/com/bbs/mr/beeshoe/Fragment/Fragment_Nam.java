@@ -3,6 +3,7 @@ package com.bbs.mr.beeshoe.Fragment;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -97,17 +98,17 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
 
         GetAllSP(url);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(),
+        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(),
                 recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
-                Toast.makeText(getContext(), "Single Click on position :" + position,
+                Toast.makeText(getContext(), "Single Click on position :" +adapter.getItemId(position),
                         Toast.LENGTH_SHORT).show();
             }
-        }));
+        }));*/
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(0), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         //prepareSP();
@@ -120,9 +121,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
         return view;
     }
 
-    public static interface ClickListener {
-        public void onClick(View view, int position);
-    }
+
 
     private void prepareSP() {
 
@@ -199,7 +198,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
     }
 
     //Recycler item click
-    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+/*    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private ClickListener clicklistener;
         private GestureDetector gestureDetector;
@@ -234,7 +233,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
-    }
+    }*/
 
     private void GetAllSP(String url) {
         final RequestQueue request = Volley.newRequestQueue(getContext());

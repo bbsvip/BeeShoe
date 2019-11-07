@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity=""
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:layout_width="180dp"
+        android:layout_width="match_parent"
         android:layout_height="250dp">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff">
+            android:layout_height="140dp"
+            android:background="@drawable/borrder_item"
+            android:backgroundTint="#ffffff"
+            android:backgroundTintMode="add">
 
 
             <ImageView
@@ -21,10 +21,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
+                android:layout_margin="10dp"
                 android:src="@mipmap/ic_launcher" />
+
             <RatingBar
                 android:id="@+id/rating"
-                style="?android:attr/ratingBarStyleSmall"
+                style="@style/Base.Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
@@ -43,17 +45,18 @@
                 android:id="@+id/tv_name_sp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:maxLines="2"
                 android:text="NameSP ......................."
                 android:textAlignment="center"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:maxLines="2"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <TextView
                     android:id="@+id/tv_gia_sp"
                     android:layout_width="match_parent"
@@ -62,11 +65,12 @@
                     android:text="Gia SP"
                     android:textAlignment="center"
                     android:textSize="10sp" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" VND"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp" />
             </LinearLayout>
 
 
