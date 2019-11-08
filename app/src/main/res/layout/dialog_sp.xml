@@ -10,12 +10,12 @@
     android:layout_marginBottom="10dp"
     android:fillViewport="true"
     android:orientation="vertical"
+    android:scrollbarStyle="outsideOverlay"
     android:theme="@style/AppTheme">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:orientation="vertical">
 
 
@@ -26,7 +26,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="220dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -99,43 +99,52 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_info_add_cart"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:text="Thêm vào giỏ"
-                    android:textAllCaps="false"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btn_info_buy"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_weight="1"
-                    android:text="Mua ngay"
-                    android:textAllCaps="false"
-                    android:textStyle="bold" />
-            </LinearLayout>
         </LinearLayout>
 
-        <com.bbs.mr.beeshoe.NonScrollListView
-            android:id="@+id/lv_info_all_pic"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp" />
+            android:orientation="horizontal">
 
-        <ListView
-            android:id="@+id/lv_cmt"
+            <Button
+                android:id="@+id/btn_info_add_cart"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:text="Thêm vào giỏ"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_info_buy"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_weight="1"
+                android:text="Mua ngay"
+                android:textAllCaps="false"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.bbs.mr.beeshoe.NonScrollListView
+                android:id="@+id/lv_info_all_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" />
+
+            <ListView
+                android:id="@+id/lv_cmt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>

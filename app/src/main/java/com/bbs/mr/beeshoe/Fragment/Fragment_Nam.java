@@ -68,6 +68,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
     private RecyclerView recyclerView;
     private Adapter_SP adapter;
     private List<Model_SP> model;
+    private List<Model_SP> list;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -91,22 +92,12 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
         spn_gia.setOnItemSelectedListener(this);
         spn_size.setAdapter(adapter_size);
         spn_size.setOnItemSelectedListener(this);
-
         recyclerView = view.findViewById(R.id.rcv_nam);
         model = new ArrayList<>();
+        list = new ArrayList<>();
         adapter = new Adapter_SP(getContext(), model);
-
         GetAllSP(url);
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
-        /*recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getContext(),
-                recyclerView, new ClickListener() {
-            @Override
-            public void onClick(View view, final int position) {
-                //Values are passing to activity & to fragment as well
-                Toast.makeText(getContext(), "Single Click on position :" +adapter.getItemId(position),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }));*/
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -120,28 +111,6 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
 
         return view;
     }
-
-
-
-    private void prepareSP() {
-
-        model.add(new Model_SP(1, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-        model.add(new Model_SP(2, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-        model.add(new Model_SP(3, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-        model.add(new Model_SP(4, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-        model.add(new Model_SP(5, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-        model.add(new Model_SP(6, "giay", "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/moi_nam%2Fpreview%2Fgiay-moi-nam-c-o-m060-de_m500m500.jpg?alt=media&token=92cff3a8-921d-484c-b4ca-3741fd373689", 100, 900000, 1, 1, 5));
-
-    }
-
-    /*private void setAdapter(){
-        if (adapter == null){
-            adapter = new FruitAdapter(getContext(), R.layout.item_fruit, list);
-            lv.setAdapter(adapter);
-        } else {
-            lv.setSelection(adapter.getCount() - 1);
-        }
-    }*/
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -197,44 +166,6 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
 
     }
 
-    //Recycler item click
-/*    class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private ClickListener clicklistener;
-        private GestureDetector gestureDetector;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recycleView, final ClickListener clicklistener) {
-
-            this.clicklistener = clicklistener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clicklistener != null && gestureDetector.onTouchEvent(e)) {
-                clicklistener.onClick(child, rv.getChildAdapterPosition(child));
-            }
-
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }*/
-
     private void GetAllSP(String url) {
         final RequestQueue request = Volley.newRequestQueue(getContext());
         final JsonArrayRequest array = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -243,8 +174,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject object = response.getJSONObject(i);
-                        model.add(new Model_SP(
-                                object.getInt("id_sp"),
+                        list.add(new Model_SP(object.getInt("id_sp"),
                                 object.getString("name_sp"),
                                 object.getString("pic_sp"),
                                 object.getString("pics_sp"),
@@ -256,8 +186,10 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
                                 object.getInt("sl_sp"),
                                 object.getInt("sex_sp"),
                                 object.getInt("type"),
-                                object.getInt("rate")
-                        ));
+                                object.getInt("rate")));
+                        if(list.get(i).getSex() == 1){
+                            model.add(list.get(i));
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
