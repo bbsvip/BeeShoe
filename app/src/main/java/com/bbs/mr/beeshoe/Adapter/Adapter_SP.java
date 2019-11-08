@@ -2,6 +2,7 @@ package com.bbs.mr.beeshoe.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
     private ListView lvAllPic, lvCmt;
     private ImageView img_info;
     private String[] all_pic;
+    private View v_color;
     Adapter_All_Pics adapter_all_pics;
 
     public Adapter_SP(Context context, List<Model_SP> list) {
@@ -93,6 +95,7 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         tvInfo = dialog.findViewById(R.id.tv_info_sp);
         tvPrice = dialog.findViewById(R.id.tv_info_gia_sp);
         rtb = dialog.findViewById(R.id.rating_info);
+        v_color = dialog.findViewById(R.id.v_color);
         btnAddCart = dialog.findViewById(R.id.btn_info_add_cart);
         btnBuy = dialog.findViewById(R.id.btn_info_buy);
         lvAllPic = dialog.findViewById(R.id.lv_info_all_pic);
@@ -107,6 +110,27 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
             Log.i("----------------", all_pic[i]);
         }
 
+        if (model.getColor() == 1){
+            v_color.setBackgroundColor(Color.BLACK);
+        }
+        if (model.getColor() == 2){
+            v_color.setBackgroundColor(Color.WHITE);
+        }
+        if (model.getColor() == 3){
+            v_color.setBackgroundColor(Color.RED);
+        }
+        if (model.getColor() == 4){
+            v_color.setBackgroundColor(Color.parseColor("#FF9900"));
+        }
+        if (model.getColor() == 5){
+            v_color.setBackgroundColor(Color.parseColor("#FF33FF"));
+        }
+        if (model.getColor() == 6){
+            v_color.setBackgroundColor(Color.parseColor("#000044"));
+        }
+        if (model.getColor() == 7){
+            v_color.setBackgroundColor(Color.parseColor("#550000"));
+        }
         adapter_all_pics = new Adapter_All_Pics(context, all_pic);
         lvAllPic.setAdapter(adapter_all_pics);
 
@@ -150,6 +174,7 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         public ImageView thumbnail;
         public Button btn_add, btn_mua;
         public RatingBar rating;
+
 
         public ViewHolder(@NonNull View view) {
             super(view);
