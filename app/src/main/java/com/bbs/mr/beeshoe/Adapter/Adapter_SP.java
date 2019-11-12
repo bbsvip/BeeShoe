@@ -24,6 +24,7 @@ import com.bbs.mr.beeshoe.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
@@ -56,7 +57,7 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int i) {
-        DecimalFormat df = new DecimalFormat("#");
+        DecimalFormat df = new DecimalFormat("#,###");
         final Model_SP model = list.get(i);
         holder.name.setText(model.getName());
         holder.gia.setText(String.valueOf(df.format(model.getGia())));
@@ -110,25 +111,25 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
             Log.i("----------------", all_pic[i]);
         }
 
-        if (model.getColor() == 1){
+        if (model.getColor() == 1) {
             v_color.setBackgroundColor(Color.BLACK);
         }
-        if (model.getColor() == 2){
+        if (model.getColor() == 2) {
             v_color.setBackgroundColor(Color.WHITE);
         }
-        if (model.getColor() == 3){
+        if (model.getColor() == 3) {
             v_color.setBackgroundColor(Color.RED);
         }
-        if (model.getColor() == 4){
+        if (model.getColor() == 4) {
             v_color.setBackgroundColor(Color.parseColor("#FF9900"));
         }
-        if (model.getColor() == 5){
+        if (model.getColor() == 5) {
             v_color.setBackgroundColor(Color.parseColor("#FF33FF"));
         }
-        if (model.getColor() == 6){
+        if (model.getColor() == 6) {
             v_color.setBackgroundColor(Color.parseColor("#000044"));
         }
-        if (model.getColor() == 7){
+        if (model.getColor() == 7) {
             v_color.setBackgroundColor(Color.parseColor("#550000"));
         }
         adapter_all_pics = new Adapter_All_Pics(context, all_pic);

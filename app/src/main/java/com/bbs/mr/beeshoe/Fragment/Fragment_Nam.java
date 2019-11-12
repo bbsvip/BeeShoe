@@ -95,13 +95,15 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
         recyclerView = view.findViewById(R.id.rcv_nam);
         model = new ArrayList<>();
         list = new ArrayList<>();
-        adapter = new Adapter_SP(getContext(), model);
         GetAllSP(url);
+
+
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
+
+        setAdapterSP();
         //prepareSP();
         try {
             Glide.with(this).load(R.drawable.ic_launcher_background).into((ImageView) view.findViewById(R.id.img_sp));
@@ -111,6 +113,12 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
 
         return view;
     }
+
+    private void setAdapterSP() {
+        adapter = new Adapter_SP(getContext(), model);
+        recyclerView.setAdapter(adapter);
+    }
+
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
         private int spanCount;
@@ -156,9 +164,20 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
     //Spinner item click
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("item", parent.getItemAtPosition(position).toString());
+        /*Log.i("item", parent.getItemAtPosition(position).toString());
         Log.i("item cc", "" + parent.getSelectedItemPosition());
         Log.i("item cl", parent.getId() + "");
+        Log.i("id spn 1: ", spn.getSelectedItemPosition() + "cc");*/
+        model.clear();
+        for (int i =0;i<list.size();i++){
+            if (spn.getSelectedItemPosition() == 0 && list.get(i).getSex() == 1) {
+                model.add(list.get(i));
+            } else if (list.get(i).getSex() == 1 && spn.getSelectedItemPosition() == list.get(i).getType()) {
+                model.add(list.get(i));
+            }
+        }
+        adapter.notifyDataSetChanged();
+        setAdapterSP();
     }
 
     @Override
@@ -187,9 +206,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
                                 object.getInt("sex_sp"),
                                 object.getInt("type"),
                                 object.getInt("rate")));
-                        if(list.get(i).getSex() == 1){
-                            model.add(list.get(i));
-                        }
+                        model.add(list.get(i));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
