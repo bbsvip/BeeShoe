@@ -21,11 +21,6 @@
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
-        <Spinner
-            android:id="@+id/spn_sandal_size"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"

@@ -25,13 +25,7 @@ public class Fragment_Nu extends Fragment implements AdapterView.OnItemSelectedL
             "Phổ biến",
             "Giá: thấp - cao",
             "Giá: cao - thấp",};
-    private static final String[] size = {
-            "Mọi size",
-            "35",
-            "36",
-            "37",
-            "38",
-            "39"};
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,22 +34,18 @@ public class Fragment_Nu extends Fragment implements AdapterView.OnItemSelectedL
 
         spn = view.findViewById(R.id.spn_nu);
         spn_gia = view.findViewById(R.id.spn_nu_gia);
-        spn_size = view.findViewById(R.id.spn_nu_size);
         ArrayAdapter<String> adapter_muc = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, muc);
         adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter<String> adapter_gia = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, gia);
-        adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<String> adapter_size = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item, size);
-        adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter_gia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spn.setAdapter(adapter_muc);
         spn.setOnItemSelectedListener(this);
         spn_gia.setAdapter(adapter_gia);
         spn_gia.setOnItemSelectedListener(this);
-        spn_size.setAdapter(adapter_size);
-        spn_size.setOnItemSelectedListener(this);
+
         return view;
     }
 

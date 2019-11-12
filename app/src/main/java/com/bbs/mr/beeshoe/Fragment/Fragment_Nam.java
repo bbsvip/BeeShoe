@@ -1,9 +1,7 @@
 package com.bbs.mr.beeshoe.Fragment;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,9 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,12 +34,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
-public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelectedListener {
+public class Fragment_Nam extends Fragment {
 
     String url = "http://hoadondientuquynhon.com/getAll.php";
-    private Spinner spn, spn_gia, spn_size;
+    private Spinner spn, spn_gia;
     private static final String[] muc = {
             "Tất cả",
             "Giày Mọi",
@@ -57,14 +55,7 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
             "Phổ biến",
             "Giá: thấp - cao",
             "Giá: cao - thấp",};
-    private static final String[] size = {
-            "Mọi size",
-            "38",
-            "39",
-            "40",
-            "41",
-            "42",
-            "43"};
+
     private RecyclerView recyclerView;
     private Adapter_SP adapter;
     private List<Model_SP> model;
@@ -76,22 +67,73 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
         View view = inflater.inflate(R.layout.giay_nam, container, false);
         spn = view.findViewById(R.id.spn_nam);
         spn_gia = view.findViewById(R.id.spn_nam_gia);
-        spn_size = view.findViewById(R.id.spn_nam_size);
+
         ArrayAdapter<String> adapter_muc = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, muc);
         adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ArrayAdapter<String> adapter_gia = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, gia);
-        adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        ArrayAdapter<String> adapter_size = new ArrayAdapter<String>(getContext(),
-                android.R.layout.simple_spinner_item, size);
-        adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter_gia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spn.setAdapter(adapter_muc);
-        spn.setOnItemSelectedListener(this);
         spn_gia.setAdapter(adapter_gia);
-        spn_gia.setOnItemSelectedListener(this);
-        spn_size.setAdapter(adapter_size);
-        spn_size.setOnItemSelectedListener(this);
+        spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                model.clear();
+                for (int i = 0; i < list.size(); i++) {
+                    if (position == 0 && list.get(i).getSex() == 1) {
+                        model.add(list.get(i));
+                    } else if (list.get(i).getSex() == 1 && position == list.get(i).getType()) {
+                        model.add(list.get(i));
+                    }
+                }
+                adapter.notifyDataSetChanged();
+                setAdapterSP();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spn_gia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0) {
+                    Collections.sort(model, new Comparator<Model_SP>() {
+                        public int compare(Model_SP obj1, Model_SP obj2) {
+                            return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
+                        }
+                    });
+                }
+                if (position == 1) {
+                    Collections.sort(model, new Comparator<Model_SP>() {
+                        public int compare(Model_SP obj1, Model_SP obj2) {
+                            // ## Ascending order
+                            return Double.valueOf(obj1.getGia()).compareTo(Double.valueOf(obj2.getGia())); // To compare integer values
+                        }
+                    });
+                }
+                if (position == 2) {
+                    Collections.sort(model, new Comparator<Model_SP>() {
+                        public int compare(Model_SP obj1, Model_SP obj2) {
+                            // ## Descending order
+                            return Double.valueOf(obj2.getGia()).compareTo(Double.valueOf(obj1.getGia())); // To compare integer values
+                        }
+                    });
+                }
+                adapter.notifyDataSetChanged();
+                setAdapterSP();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         recyclerView = view.findViewById(R.id.rcv_nam);
         model = new ArrayList<>();
         list = new ArrayList<>();
@@ -159,30 +201,6 @@ public class Fragment_Nam extends Fragment implements AdapterView.OnItemSelected
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
-    }
-
-    //Spinner item click
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        /*Log.i("item", parent.getItemAtPosition(position).toString());
-        Log.i("item cc", "" + parent.getSelectedItemPosition());
-        Log.i("item cl", parent.getId() + "");
-        Log.i("id spn 1: ", spn.getSelectedItemPosition() + "cc");*/
-        model.clear();
-        for (int i =0;i<list.size();i++){
-            if (spn.getSelectedItemPosition() == 0 && list.get(i).getSex() == 1) {
-                model.add(list.get(i));
-            } else if (list.get(i).getSex() == 1 && spn.getSelectedItemPosition() == list.get(i).getType()) {
-                model.add(list.get(i));
-            }
-        }
-        adapter.notifyDataSetChanged();
-        setAdapterSP();
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     private void GetAllSP(String url) {

@@ -90,7 +90,7 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_sp);
         dialog.show();
-        DecimalFormat df = new DecimalFormat("#");
+        DecimalFormat df = new DecimalFormat("#,###");
         all_pic = model.getAll_pic().split(",");
         tvName = dialog.findViewById(R.id.tv_info_name_sp);
         tvInfo = dialog.findViewById(R.id.tv_info_sp);
