@@ -86,7 +86,6 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
 
     private void OnClickItem(Model_SP model) {
 
-        //Toast.makeText(context, "Click at "+id, Toast.LENGTH_SHORT).show();
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.dialog_sp);
         dialog.show();
@@ -107,9 +106,6 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         tvPrice.setText(df.format(model.getGia()));
         rtb.setRating(model.getRate());
         Picasso.get().load(String.valueOf(model.getThump())).into(img_info);
-        for (int i = 0; i < all_pic.length; i++) {
-            Log.i("----------------", all_pic[i]);
-        }
 
         if (model.getColor() == 1) {
             v_color.setBackgroundColor(Color.BLACK);
@@ -131,6 +127,9 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         }
         if (model.getColor() == 7) {
             v_color.setBackgroundColor(Color.parseColor("#550000"));
+        }
+        if (model.getColor() == 8) {
+            v_color.setBackgroundColor(Color.parseColor("#008080"));
         }
         adapter_all_pics = new Adapter_All_Pics(context, all_pic);
         lvAllPic.setAdapter(adapter_all_pics);
@@ -179,20 +178,12 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
 
         public ViewHolder(@NonNull View view) {
             super(view);
-            //itemView.setOnClickListener(this);
             name = view.findViewById(R.id.tv_name_sp);
             gia = view.findViewById(R.id.tv_gia_sp);
             thumbnail = view.findViewById(R.id.img_sp);
             btn_add = view.findViewById(R.id.btn_them_gio_hang);
             btn_mua = view.findViewById(R.id.btn_mua_ngay);
             rating = view.findViewById(R.id.rating);
-            /*view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "CCC", Toast.LENGTH_SHORT).show();
-
-                }
-            });*/
         }
 
         @Override

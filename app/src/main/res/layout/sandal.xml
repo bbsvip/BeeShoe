@@ -22,8 +22,15 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_sandal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_sandal"/>
+        android:layout_weight="1" />
+
+    <ListView
+        android:id="@+id/lv_sandal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 </LinearLayout>

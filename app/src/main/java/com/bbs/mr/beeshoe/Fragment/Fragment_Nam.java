@@ -224,9 +224,19 @@ public class Fragment_Nam extends Fragment {
                                 object.getInt("sex_sp"),
                                 object.getInt("type"),
                                 object.getInt("rate")));
-                        model.add(list.get(i));
+                        //model.add(list.get(i));
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }
+                }
+                Collections.sort(list, new Comparator<Model_SP>() {
+                    public int compare(Model_SP obj1, Model_SP obj2) {
+                        return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
+                    }
+                });
+                for (int i = 0;i<list.size();i++){
+                    if (list.get(i).getSex() == 1) {
+                        model.add(list.get(i));
                     }
                 }
                 adapter.notifyDataSetChanged();

@@ -44,7 +44,7 @@ public class Fragment_Home extends Fragment {
         }
         Animation in = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_in_left);
         Animation out = AnimationUtils.loadAnimation(getContext(), android.R.anim.slide_out_right);
-        vf.setFlipInterval(3000); // 3s
+        vf.setFlipInterval(5000); // 3s
         vf.setInAnimation(in);
         vf.setOutAnimation(out);
         vf.setAutoStart(true);

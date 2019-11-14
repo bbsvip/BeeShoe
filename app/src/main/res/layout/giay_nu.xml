@@ -23,8 +23,15 @@
 
 
     </LinearLayout>
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rcv_nu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_nu"/>
+        android:layout_weight="1" />
+
+    <ListView
+        android:id="@+id/lv_nu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
 </LinearLayout>
