@@ -1,16 +1,21 @@
 package com.bbs.mr.beeshoe.Activity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
+import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -25,12 +30,13 @@ import com.bbs.mr.beeshoe.R;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String u, p, mUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
             View v = this.getWindow().getDecorView();
             v.setSystemUiVisibility(View.GONE);
-        } else if(Build.VERSION.SDK_INT >= 19) {
+        } else if (Build.VERSION.SDK_INT >= 19) {
             //for new api versions.
             View decorView = getWindow().getDecorView();
             int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -40,6 +46,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (ckShap() < 0) {
+            Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
+            /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);*/
+        } else {
+            Toast.makeText(this, "Mừng bạn trở lại "+u, Toast.LENGTH_SHORT).show();
+        }
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +95,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -90,7 +105,50 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.nav_acc) {
-            Toast.makeText(this, "Account Actionbar", Toast.LENGTH_SHORT).show();
+            // inflate menu
+            View vItem = this.findViewById(R.id.nav_acc);
+            MenuBuilder menuBuilder = new MenuBuilder(this);
+            MenuInflater inflater = new MenuInflater(this);
+            inflater.inflate(R.menu.menu_acc, menuBuilder);
+            MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, vItem);
+            optionsMenu.setForceShowIcon(true);
+
+            // Set Item Click Listener
+            menuBuilder.setCallback(new MenuBuilder.Callback() {
+                @Override
+                public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.acc_login: // Handle option1 Click
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            return true;
+                        case R.id.acc_register: // Handle option2 Click
+                            return true;
+                        case R.id.acc_cart: // Handle option2 Click
+                            return true;
+                        case R.id.acc_logout: // Handle option2 Click
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                @Override
+                public void onMenuModeChange(MenuBuilder menu) {}
+            });
+
+
+            // Display the menu
+            optionsMenu.show();
+            /*PopupMenu popup = new PopupMenu(this, vItem);
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.menu_acc, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    return false;
+                }
+            });
+            popup.show();*/
         } else if (id == R.id.nav_search) {
             Toast.makeText(this, "Search Actionbar", Toast.LENGTH_SHORT).show();
         }
@@ -128,5 +186,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public int ckShap() {
+        SharedPreferences pref = getSharedPreferences("USER_FILE", MODE_PRIVATE);
+        boolean chk = pref.getBoolean("REMEMBER", false);
+        if (chk) {
+            u = pref.getString("USERNAME", "");
+            p = pref.getString("PASSWORD", "");
+            return 1;
+        }
+        return -1;
     }
 }
