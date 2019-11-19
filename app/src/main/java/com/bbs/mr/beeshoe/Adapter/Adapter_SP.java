@@ -5,17 +5,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +21,9 @@ import com.bbs.mr.beeshoe.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
+public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private List<Model_SP> list;
@@ -41,6 +37,9 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
     private View v_color;
     Adapter_All_Pics adapter_all_pics;
 
+    private final int VIEW_TYPE_ITEM = 0;
+    private final int VIEW_TYPE_LOADING = 1;
+
     public Adapter_SP(Context context, List<Model_SP> list) {
         this.context = context;
         this.list = list;
@@ -49,39 +48,26 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_sp, parent, false);
-        return new ViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+
+        if (i == VIEW_TYPE_ITEM) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_sp, parent, false);
+            return new ItemViewHolder(itemView);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.loading, parent, false);
+            return new LoadingViewHolder(view);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int i) {
-        DecimalFormat df = new DecimalFormat("#,###");
-        final Model_SP model = list.get(i);
-        holder.name.setText(model.getName());
-        holder.gia.setText(String.valueOf(df.format(model.getGia())));
-        holder.rating.setRating(model.getRate());
-        Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
-        holder.btn_mua.setOnClickListener(new View.OnClickListener() {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int i) {
 
-            public void onClick(View view) {
-                OnClickBuy();
-            }
-        });
-        holder.btn_add.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                OnClickAdd();
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                OnClickItem(list.get(i));
-            }
-        });
-
+        if (holder instanceof ItemViewHolder) {
+            populateItemRows((ItemViewHolder) holder, i);
+        } else if (holder instanceof LoadingViewHolder) {
+            showLoadingView((LoadingViewHolder) holder, i);
+        }
     }
 
     private void OnClickItem(Model_SP model) {
@@ -165,10 +151,81 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return list == null ? 0 : list.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @Override
+    public int getItemViewType(int position) {
+        return list.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    }
+
+    private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public TextView name, gia;
+        public ImageView thumbnail;
+        public Button btn_add, btn_mua;
+        public RatingBar rating;
+
+
+        public ItemViewHolder(@NonNull View view) {
+            super(view);
+            name = view.findViewById(R.id.tv_name_sp);
+            gia = view.findViewById(R.id.tv_gia_sp);
+            thumbnail = view.findViewById(R.id.img_sp);
+            btn_add = view.findViewById(R.id.btn_them_gio_hang);
+            btn_mua = view.findViewById(R.id.btn_mua_ngay);
+            rating = view.findViewById(R.id.rating);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+    private class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        ProgressBar progressBar;
+
+        public LoadingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            progressBar = itemView.findViewById(R.id.prb);
+        }
+    }
+    private void showLoadingView(LoadingViewHolder holder, int i) {
+        //ProgressBar would be displayed
+
+    }
+    private void populateItemRows(ItemViewHolder holder, final int i) {
+
+        DecimalFormat df = new DecimalFormat("#,###");
+        final Model_SP model = list.get(i);
+        holder.name.setText(model.getName());
+        holder.gia.setText(String.valueOf(df.format(model.getGia())));
+        holder.rating.setRating(model.getRate());
+        Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
+        holder.btn_mua.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                OnClickBuy();
+            }
+        });
+        holder.btn_add.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                OnClickAdd();
+            }
+        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OnClickItem(list.get(i));
+            }
+        });
+
+    }
+
+    /*public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView name, gia;
         public ImageView thumbnail;
@@ -190,5 +247,13 @@ public class Adapter_SP extends RecyclerView.Adapter<Adapter_SP.ViewHolder> {
         public void onClick(View v) {
 
         }
-    }
+    }*/
+
+
+    //Test start
+
+    //Test end
+
+
+
 }
