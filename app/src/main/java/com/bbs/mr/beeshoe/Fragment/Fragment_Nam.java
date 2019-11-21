@@ -62,6 +62,7 @@ public class Fragment_Nam extends Fragment {
     private Adapter_SP adapter;
     private List<Model_SP> model;
     private List<Model_SP> list;
+    private List<Model_SP> listSex;
     private List<Model_SP> listType;
     boolean isLoading = false;
 
@@ -84,15 +85,35 @@ public class Fragment_Nam extends Fragment {
         spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                model.clear();
-                for (int i = 0; i < list.size(); i++) {
-                    if (position == 0 && list.get(i).getSex() == 1) {
-                        model.add(list.get(i));
-                    } else if (list.get(i).getSex() == 1 && position == list.get(i).getType()) {
-                        model.add(list.get(i));
+                if (position == 0) {
+                    for (int i = 0; i < listSex.size(); i++) {
+                        model.clear();
+                        listType.clear();
+                        listSex.clear();
+                        list.clear();
+                        GetAllSP(url);
+                        setAdapterSP();
+                    }
+                } else {
+                    model.clear();
+                    listType.clear();
+                    for (int i = 0; i < listSex.size(); i++) {
+                        if (position == listSex.get(i).getType()) {
+                            //model.add(listSex.get(i));
+                            listType.add(listSex.get(i));
+                        }
+                    }
+                    for (int i = 0; i < 10; i++) {
+                        if (i == listType.size()) {
+                            break;
+                        } else {
+                            model.add(listType.get(i));
+                        }
                     }
                 }
+
                 adapter.notifyDataSetChanged();
+
                 setAdapterSP();
             }
 
@@ -101,7 +122,9 @@ public class Fragment_Nam extends Fragment {
 
             }
         });
-        spn_gia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spn_gia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+
+        {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -141,20 +164,33 @@ public class Fragment_Nam extends Fragment {
         recyclerView = view.findViewById(R.id.rcv_nam);
         model = new ArrayList<>();
         list = new ArrayList<>();
+        listSex = new ArrayList<>();
         listType = new ArrayList<>();
+
         GetAllSP(url);
 
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new
+
+                GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.setItemAnimator(new
+
+                DefaultItemAnimator());
+
         setAdapterSP();
+
         initScrollListener();
         //prepareSP();
-        try {
+        try
+
+        {
             Glide.with(this).load(R.drawable.ic_launcher_background).into((ImageView) view.findViewById(R.id.img_sp));
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             e.printStackTrace();
         }
 
@@ -198,6 +234,7 @@ public class Fragment_Nam extends Fragment {
                 }
             }
         }
+
     }
 
     /**
@@ -239,14 +276,14 @@ public class Fragment_Nam extends Fragment {
                         return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
                     }
                 });
-                for (int i = 0;i< 10/*list.size()*/;i++){
+                for (int i = 0; i < 10/*list.size()*/; i++) {
                     if (list.get(i).getSex() == 1) {
                         model.add(list.get(i));
                     }
                 }
-                for (int i = 0;i< list.size()/*list.size()*/;i++){
+                for (int i = 0; i < list.size()/*list.size()*/; i++) {
                     if (list.get(i).getSex() == 1) {
-                        listType.add(list.get(i));
+                        listSex.add(list.get(i));
                     }
                 }
                 adapter.notifyDataSetChanged();
@@ -289,8 +326,6 @@ public class Fragment_Nam extends Fragment {
     private void loadMore() {
         model.add(null);
         adapter.notifyItemInserted(model.size() - 1);
-
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -301,11 +336,33 @@ public class Fragment_Nam extends Fragment {
                 int currentSize = scrollPosition;
                 int nextLimit = currentSize + 5;
 
-                while (currentSize - 1 < nextLimit) {
-                    model.add(listType.get(currentSize));
-                    currentSize++;
+                if (spn.getSelectedItemPosition() == 0) {
+                    if (model.size() < listSex.size()) {
+                        while (currentSize - 1 < nextLimit) {
+                            if (currentSize == listSex.size()) {
+                                break;
+                            } else {
+                                model.add(listSex.get(currentSize));
+                            }
+                            currentSize++;
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Đã xem hết sản phẩm !", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (model.size() < listType.size()) {
+                        while (currentSize - 1 < nextLimit) {
+                            if (currentSize == listType.size()) {
+                                break;
+                            } else {
+                                model.add(listType.get(currentSize));
+                            }
+                            currentSize++;
+                        }
+                    } else {
+                        Toast.makeText(getContext(), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                    }
                 }
-
                 adapter.notifyDataSetChanged();
                 isLoading = false;
             }
