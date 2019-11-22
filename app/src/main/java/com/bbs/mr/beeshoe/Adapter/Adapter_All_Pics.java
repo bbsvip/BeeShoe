@@ -49,7 +49,12 @@ public class Adapter_All_Pics extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
         String url = all_pic[position];
-        Picasso.get().load(url).into(holder.img);
+        if (!url.isEmpty()){
+            Picasso.get().load(url).into(holder.img);
+        } else {
+            Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.img);
+        }
+
         return view;
     }
     public class ViewHolder{

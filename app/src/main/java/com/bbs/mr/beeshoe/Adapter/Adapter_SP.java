@@ -91,7 +91,12 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tvInfo.setText(model.getInfo());
         tvPrice.setText(df.format(model.getGia()));
         rtb.setRating(model.getRate());
-        Picasso.get().load(String.valueOf(model.getThump())).into(img_info);
+        if(!model.getThump().isEmpty()){
+            Picasso.get().load(String.valueOf(model.getThump())).into(img_info);
+        } else {
+            Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(img_info);
+        }
+
 
         if (model.getColor() == 1) {
             v_color.setBackgroundColor(Color.BLACK);
@@ -203,7 +208,12 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.name.setText(model.getName());
         holder.gia.setText(String.valueOf(df.format(model.getGia())));
         holder.rating.setRating(model.getRate());
-        Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
+        if(!model.getThump().isEmpty()){
+            Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
+        } else {
+            Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.thumbnail);
+        }
+
         holder.btn_mua.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
