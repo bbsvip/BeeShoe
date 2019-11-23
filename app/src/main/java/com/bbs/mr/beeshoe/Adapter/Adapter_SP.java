@@ -3,11 +3,13 @@ package com.bbs.mr.beeshoe.Adapter;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,7 +30,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<Model_SP> list;
     private final LayoutInflater inflater;
-    private TextView tvName, tvInfo, tvPrice;
+    private TextView tvName, tvInfo, tvPrice, tvGiaGoc;
     private RatingBar rtb;
     private Button btnAddCart, btnBuy;
     private ListView lvAllPic, lvCmt;
@@ -73,6 +75,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private void OnClickItem(Model_SP model) {
 
         Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_sp);
         dialog.show();
         DecimalFormat df = new DecimalFormat("#,###");
@@ -80,6 +83,8 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tvName = dialog.findViewById(R.id.tv_info_name_sp);
         tvInfo = dialog.findViewById(R.id.tv_info_sp);
         tvPrice = dialog.findViewById(R.id.tv_info_gia_sp);
+        tvGiaGoc = dialog.findViewById(R.id.tv_gia_goc);
+        tvGiaGoc.setPaintFlags(tvGiaGoc.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         rtb = dialog.findViewById(R.id.rating_info);
         v_color = dialog.findViewById(R.id.v_color);
         btnAddCart = dialog.findViewById(R.id.btn_info_add_cart);
@@ -89,7 +94,8 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         img_info = dialog.findViewById(R.id.img_info_sp);
         tvName.setText(model.getName());
         tvInfo.setText(model.getInfo());
-        tvPrice.setText(df.format(model.getGia()));
+        tvPrice.setText(String.valueOf(df.format(model.getGia()))+" VND");
+        tvGiaGoc.setText(String.valueOf(df.format(model.getGia()+((model.getGia()*50f)/100f))));
         rtb.setRating(model.getRate());
         if(!model.getThump().isEmpty()){
             Picasso.get().load(String.valueOf(model.getThump())).into(img_info);
@@ -166,7 +172,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        public TextView name, gia;
+        public TextView name, gia, tv_sale, gia_goc;
         public ImageView thumbnail;
         public Button btn_add, btn_mua;
         public RatingBar rating;
@@ -180,6 +186,9 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btn_add = view.findViewById(R.id.btn_them_gio_hang);
             btn_mua = view.findViewById(R.id.btn_mua_ngay);
             rating = view.findViewById(R.id.rating);
+            tv_sale = view.findViewById(R.id.tv_sale);
+            gia_goc = view.findViewById(R.id.tv_gia_goc_sp);
+            gia_goc.setPaintFlags(gia_goc.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         }
 
         @Override
@@ -206,8 +215,10 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         DecimalFormat df = new DecimalFormat("#,###");
         final Model_SP model = list.get(i);
         holder.name.setText(model.getName());
-        holder.gia.setText(String.valueOf(df.format(model.getGia())));
+        holder.gia.setText(String.valueOf(df.format(model.getGia()))+" VND");
         holder.rating.setRating(model.getRate());
+        holder.tv_sale.setText("50");
+        holder.gia_goc.setText(String.valueOf(df.format(model.getGia()+((model.getGia()*50f)/100f))));
         if(!model.getThump().isEmpty()){
             Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
         } else {
