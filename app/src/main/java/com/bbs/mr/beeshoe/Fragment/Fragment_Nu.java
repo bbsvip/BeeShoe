@@ -38,8 +38,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class Fragment_Nu extends Fragment{
-    String url = "http://hoadondientuquynhon.com/getAll.php";
+public class Fragment_Nu extends Fragment {
+    //String url = "http://hoadondientuquynhon.com/getAll.php";
+    String url = "https://mr-bbs.000webhostapp.com/getAll.php";
     private Spinner spn, spn_gia;
     private static final String[] muc = {
             "Tất cả",
@@ -232,7 +233,7 @@ public class Fragment_Nu extends Fragment{
                         return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
                     }
                 });
-                for (int i = 0;i<list.size();i++){
+                for (int i = 0; i < list.size(); i++) {
                     if (list.get(i).getSex() == 2) {
                         model.add(list.get(i));
                     }

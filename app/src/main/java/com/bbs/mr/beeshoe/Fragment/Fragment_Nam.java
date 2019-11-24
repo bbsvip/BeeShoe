@@ -42,7 +42,9 @@ import java.util.List;
 
 public class Fragment_Nam extends Fragment {
 
-    String url = "http://hoadondientuquynhon.com/getAll.php";
+    //String url = "http://hoadondientuquynhon.com/getAll.php";
+    String url = "https://mr-bbs.000webhostapp.com/getAll.php";
+
     private Spinner spn, spn_gia;
     private static final String[] muc = {
             "Tất cả",
