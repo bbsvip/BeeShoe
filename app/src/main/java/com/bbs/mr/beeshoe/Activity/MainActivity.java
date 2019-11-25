@@ -1,12 +1,20 @@
 package com.bbs.mr.beeshoe.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,6 +26,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
@@ -47,6 +57,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         if (ckShap() < 0) {
             Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
             /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
@@ -59,9 +70,9 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
-                Toast.makeText(MainActivity.this, "Cart", Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Cart", Snackbar.LENGTH_LONG)
+                        .setAction("", null).show();
+                //Toast.makeText(MainActivity.this, "Cart", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -196,5 +207,65 @@ public class MainActivity extends AppCompatActivity
             return 1;
         }
         return -1;
+    }
+    BroadcastReceiver checkInternet = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectivityManager =
+                    (ConnectivityManager)context.getSystemService( CONNECTIVITY_SERVICE );
+            if(connectivityManager.getActiveNetworkInfo() != null){
+                /*btnLogin.setEnabled( true );
+                btnLogin.setTextColor( Color.WHITE);*/
+            }else{
+                new Handler(  ).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                       /* btnLogin.setTextColor( Color.rgb( 137, 137, 137 ));
+                        btnLogin.setEnabled( false );*/
+                        turnOnInternet();
+                    }
+                }, 1000 );
+
+            }
+        }
+    };
+
+    private void turnOnInternet() {
+
+
+        Button yes,no;
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_network);
+        yes = dialog.findViewById(R.id.btnYesCheckNet);
+        no = dialog.findViewById(R.id.btnNoCheckNet);
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WifiManager wifi = (WifiManager)getApplicationContext().getSystemService( WIFI_SERVICE );
+                wifi.setWifiEnabled( true );
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter( ConnectivityManager.CONNECTIVITY_ACTION );
+        registerReceiver( checkInternet, filter );
+    }
+    //hủy bỏ
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver( checkInternet );
     }
 }

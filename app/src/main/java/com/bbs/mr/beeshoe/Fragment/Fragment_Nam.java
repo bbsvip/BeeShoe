@@ -5,6 +5,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class Fragment_Nam extends Fragment {
 
@@ -349,7 +351,9 @@ public class Fragment_Nam extends Fragment {
                             currentSize++;
                         }
                     } else {
-                        Toast.makeText(getContext(), "Đã xem hết sản phẩm !", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(Objects.requireNonNull(getView()), "Đã xem hết sản phẩm!", Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();
+                        //Toast.makeText(getContext(), "Đã xem hết sản phẩm !", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (model.size() < listType.size()) {
@@ -362,7 +366,9 @@ public class Fragment_Nam extends Fragment {
                             currentSize++;
                         }
                     } else {
-                        Toast.makeText(getContext(), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Toast.LENGTH_SHORT).show();
+                        Snackbar.make(Objects.requireNonNull(getView()), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();
+                        //Toast.makeText(getContext(), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Toast.LENGTH_SHORT).show();
                     }
                 }
                 adapter.notifyDataSetChanged();

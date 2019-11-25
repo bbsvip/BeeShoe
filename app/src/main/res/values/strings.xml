@@ -12,4 +12,8 @@
     <string name="namesp">NameSP .......................</string>
     <string name="sale">%</string>
     <string name="sl">sl</string>
+    <string name="noInternet">Chưa có kết nối mạng!</string>
+    <string name="connectInternet">Bạn có muốn mở wifi?</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
 </resources>
