@@ -5,7 +5,7 @@
     android:layout_gravity="center|top"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="@drawable/borrder_item">
 
     <ImageView
         android:id="@+id/img_item_pics"

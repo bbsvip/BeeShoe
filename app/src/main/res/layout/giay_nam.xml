@@ -24,6 +24,11 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/prgNam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcv_nam"
         android:layout_width="match_parent"

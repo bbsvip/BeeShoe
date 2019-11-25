@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,12 +34,14 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater inflater;
     private TextView tvName, tvInfo, tvPrice, tvGiaGoc;
     private RatingBar rtb;
-    private Button btnAddCart, btnBuy;
+    private Button btnAddCart, btnBuy, btnBack;
     private ListView lvAllPic, lvCmt;
     private ImageView img_info;
     private String[] all_pic;
     private View v_color;
+    private ScrollView scv;
     Adapter_All_Pics adapter_all_pics;
+    private ProgressBar prg;
 
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
@@ -74,11 +78,12 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void OnClickItem(Model_SP model) {
 
-        Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_sp);
         dialog.show();
         DecimalFormat df = new DecimalFormat("#,###");
+        prg = dialog.findViewById(R.id.prgDialog);
         all_pic = model.getAll_pic().split(",");
         tvName = dialog.findViewById(R.id.tv_info_name_sp);
         tvInfo = dialog.findViewById(R.id.tv_info_sp);
@@ -87,6 +92,21 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         tvGiaGoc.setPaintFlags(tvGiaGoc.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         rtb = dialog.findViewById(R.id.rating_info);
         v_color = dialog.findViewById(R.id.v_color);
+        scv = dialog.findViewById(R.id.scvDialog);
+        scv.fullScroll(ScrollView.FOCUS_UP);
+        new CountDownTimer(2000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                prg.setVisibility(View.VISIBLE);
+                scv.setVisibility(View.INVISIBLE);
+            }
+
+            public void onFinish() {
+                prg.setVisibility(View.GONE);
+                scv.setVisibility(View.VISIBLE);
+            }
+        }.start();
+        btnBack = dialog.findViewById(R.id.btnBackInfoSp);
         btnAddCart = dialog.findViewById(R.id.btn_info_add_cart);
         btnBuy = dialog.findViewById(R.id.btn_info_buy);
         lvAllPic = dialog.findViewById(R.id.lv_info_all_pic);
@@ -102,7 +122,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(img_info);
         }
-
 
         if (model.getColor() == 1) {
             v_color.setBackgroundColor(Color.BLACK);
@@ -131,6 +150,12 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         adapter_all_pics = new Adapter_All_Pics(context, all_pic);
         lvAllPic.setAdapter(adapter_all_pics);
 
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

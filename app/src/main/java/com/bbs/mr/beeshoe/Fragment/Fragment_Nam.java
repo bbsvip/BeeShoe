@@ -3,6 +3,7 @@ package com.bbs.mr.beeshoe.Fragment;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -47,6 +49,12 @@ public class Fragment_Nam extends Fragment {
     //String url = "http://hoadondientuquynhon.com/getAll.php";
     String url = "https://mr-bbs.000webhostapp.com/getAll.php";
 
+    private int sex = 1;
+    private int pointType = 0;
+    CountDownTimer countDown;
+    private boolean isLoad = true;
+    private ProgressBar prg;
+
     private Spinner spn, spn_gia;
     private static final String[] muc = {
             "Tất cả",
@@ -69,14 +77,17 @@ public class Fragment_Nam extends Fragment {
     private List<Model_SP> listSex;
     private List<Model_SP> listType;
     boolean isLoading = false;
+    boolean over = false;
+
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.giay_nam, container, false);
-        spn = view.findViewById(R.id.spn_nam);
-        spn_gia = view.findViewById(R.id.spn_nam_gia);
+        View view = inflater.inflate(R.layout.giay_nu, container, false);
+        spn = view.findViewById(R.id.spn_nu);
+        spn_gia = view.findViewById(R.id.spn_nu_gia);
 
+        prg = view.findViewById(R.id.prgNu);
         ArrayAdapter<String> adapter_muc = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_item, muc);
         adapter_muc.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -89,7 +100,10 @@ public class Fragment_Nam extends Fragment {
         spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                over = false;
                 if (position == 0) {
+                    isLoad = true;
+                    WaitForLoad();
                     for (int i = 0; i < listSex.size(); i++) {
                         model.clear();
                         listType.clear();
@@ -102,7 +116,7 @@ public class Fragment_Nam extends Fragment {
                     model.clear();
                     listType.clear();
                     for (int i = 0; i < listSex.size(); i++) {
-                        if (position == listSex.get(i).getType()) {
+                        if (position + pointType == listSex.get(i).getType()) {
                             //model.add(listSex.get(i));
                             listType.add(listSex.get(i));
                         }
@@ -115,9 +129,7 @@ public class Fragment_Nam extends Fragment {
                         }
                     }
                 }
-
                 adapter.notifyDataSetChanged();
-
                 setAdapterSP();
             }
 
@@ -126,9 +138,7 @@ public class Fragment_Nam extends Fragment {
 
             }
         });
-        spn_gia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-
-        {
+        spn_gia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -165,7 +175,7 @@ public class Fragment_Nam extends Fragment {
             }
         });
 
-        recyclerView = view.findViewById(R.id.rcv_nam);
+        recyclerView = view.findViewById(R.id.rcv_nu);
         model = new ArrayList<>();
         list = new ArrayList<>();
         listSex = new ArrayList<>();
@@ -173,37 +183,28 @@ public class Fragment_Nam extends Fragment {
 
         GetAllSP(url);
 
-
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new
-
-                GridSpacingItemDecoration(2, dpToPx(5), true));
-        recyclerView.setItemAnimator(new
-
-                DefaultItemAnimator());
-
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(5), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         setAdapterSP();
 
         initScrollListener();
         //prepareSP();
-        try
-
-        {
+        try {
             Glide.with(this).load(R.drawable.ic_launcher_background).into((ImageView) view.findViewById(R.id.img_sp));
         } catch (
-                Exception e)
-
-        {
+                Exception e) {
             e.printStackTrace();
         }
-
         return view;
     }
 
     private void setAdapterSP() {
+        WaitForLoad();
         adapter = new Adapter_SP(getContext(), model);
         recyclerView.setAdapter(adapter);
+
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
@@ -225,7 +226,6 @@ public class Fragment_Nam extends Fragment {
             if (includeEdge) {
                 outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
                 outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
                 if (position < spanCount) { // top edge
                     outRect.top = spacing;
                 }
@@ -280,16 +280,21 @@ public class Fragment_Nam extends Fragment {
                         return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
                     }
                 });
-                for (int i = 0; i < 10/*list.size()*/; i++) {
-                    if (list.get(i).getSex() == 1) {
-                        model.add(list.get(i));
-                    }
-                }
-                for (int i = 0; i < list.size()/*list.size()*/; i++) {
-                    if (list.get(i).getSex() == 1) {
+                for (int i = 0; i < list.size(); i++) {
+                    if (list.get(i).getSex() == sex) {
                         listSex.add(list.get(i));
                     }
                 }
+                if (listSex.size() > 10) {
+                    for (int i = 0; i < 10; i++) {
+                        model.add(listSex.get(i));
+                    }
+                } else {
+                    for (int i = 0; i < listSex.size(); i++) {
+                        model.add(listSex.get(i));
+                    }
+                }
+                isLoad = false;
                 adapter.notifyDataSetChanged();
             }
         },
@@ -316,11 +321,13 @@ public class Fragment_Nam extends Fragment {
 
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                if (!isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.size() - 1) {
-                        //bottom of list!
-                        loadMore();
-                        isLoading = true;
+                if (!over){
+                    if (!isLoading) {
+                        if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.size() - 1) {
+                            //bottom of list!
+                            loadMore();
+                            isLoading = true;
+                        }
                     }
                 }
             }
@@ -351,6 +358,7 @@ public class Fragment_Nam extends Fragment {
                             currentSize++;
                         }
                     } else {
+                        over = true;
                         Snackbar.make(Objects.requireNonNull(getView()), "Đã xem hết sản phẩm!", Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                         //Toast.makeText(getContext(), "Đã xem hết sản phẩm !", Toast.LENGTH_SHORT).show();
@@ -366,6 +374,7 @@ public class Fragment_Nam extends Fragment {
                             currentSize++;
                         }
                     } else {
+                        over = true;
                         Snackbar.make(Objects.requireNonNull(getView()), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                         //Toast.makeText(getContext(), "Đã xem hết sản phẩm trong mục " + spn.getSelectedItem(), Toast.LENGTH_SHORT).show();
@@ -375,7 +384,23 @@ public class Fragment_Nam extends Fragment {
                 isLoading = false;
             }
         }, 2000);
+    }
 
+    private void WaitForLoad() {
+        countDown = new CountDownTimer(50000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                prg.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.INVISIBLE);
+                if (!isLoad) {
+                    onFinish();
+                }
+            }
+
+            public void onFinish() {
+                prg.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }.start();
     }
 }
