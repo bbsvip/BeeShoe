@@ -31,18 +31,18 @@
         app:srcCompat="@drawable/ic_shopping_cart_black_24dp"
         tools:ignore="VectorDrawableCompat" />
 
-    <TextView
-        android:id="@+id/tvCountCart"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+    <!--<TextView
+        android:id="@+id/tvCart"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:background="@drawable/circle"
-        android:elevation="6dp"
+        android:elevation="10dp"
         android:gravity="center"
-        android:text="OK"
+        android:text="v"
         android:textColor="#fff"
         android:textSize="18dp"
         app:layout_anchor="@id/fab"
-        app:layout_anchorGravity="top|right" />
+        app:layout_anchorGravity="top|right" />-->
 
 
 </android.support.design.widget.CoordinatorLayout>

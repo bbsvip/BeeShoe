@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bbs.mr.beeshoe.Activity.MainActivity;
 import com.bbs.mr.beeshoe.Model.Model_SP;
 import com.bbs.mr.beeshoe.R;
 import com.squareup.picasso.Picasso;
@@ -172,7 +173,10 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     private void OnClickAdd() {
-        Toast.makeText(context, "Them gio hang", Toast.LENGTH_SHORT).show();
+        if(context instanceof MainActivity){
+            ((MainActivity)context).AddCart();
+        }
+        //Toast.makeText(context, "Them gio hang", Toast.LENGTH_SHORT).show();
     }
 
     private void OnClickBuy() {

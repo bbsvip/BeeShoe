@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
@@ -41,6 +42,9 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     String u, p, mUser;
+    //TextView tvCountCart ;
+    public int countcart = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
@@ -53,20 +57,23 @@ public class MainActivity extends AppCompatActivity
             decorView.setSystemUiVisibility(uiOptions);
         }
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
         if (ckShap() < 0) {
-            Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
             /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);*/
         } else {
-            Toast.makeText(this, "Mừng bạn trở lại "+u, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Mừng bạn trở lại " + u, Toast.LENGTH_SHORT).show();
         }
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        //tvCountCart = findViewById(R.id.tvCart);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +151,8 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 @Override
-                public void onMenuModeChange(MenuBuilder menu) {}
+                public void onMenuModeChange(MenuBuilder menu) {
+                }
             });
 
 
@@ -174,20 +182,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
-            setTitle("Trang chủ");
+            Home();
         } else if (id == R.id.nav_nam) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nam()).commit();
-            setTitle("Giày nam");
+            GiayNam();
         } else if (id == R.id.nav_nu) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nu()).commit();
-            setTitle("Giày nữ");
+            GiayNu();
         } else if (id == R.id.nav_sandal) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Sandal()).commit();
-            setTitle("Sandal - Dép");
+            Sandal();
         } else if (id == R.id.nav_other) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Other()).commit();
-            setTitle("Phụ kiện khác");
+            Other();
         } else if (id == R.id.nav_drawer_acc) {
             Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_setting) {
@@ -198,6 +201,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     public int ckShap() {
         SharedPreferences pref = getSharedPreferences("USER_FILE", MODE_PRIVATE);
         boolean chk = pref.getBoolean("REMEMBER", false);
@@ -208,23 +212,56 @@ public class MainActivity extends AppCompatActivity
         }
         return -1;
     }
+
+    public void Home() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
+        setTitle("Trang chủ");
+
+    }
+
+    public void GiayNam() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nam()).commit();
+        setTitle("Giày nam");
+    }
+
+    public void GiayNu() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nu()).commit();
+        setTitle("Giày nữ");
+    }
+
+    public void Sandal() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Sandal()).commit();
+        setTitle("Sandal - Dép");
+    }
+
+    public void Other() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Other()).commit();
+        setTitle("Phụ kiện khác");
+    }
+
+    public void AddCart() {
+        countcart++;
+        //tvCountCart.setText(countcart);
+        Toast.makeText(this, "CC: "+countcart, Toast.LENGTH_SHORT).show();
+    }
+
     BroadcastReceiver checkInternet = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             ConnectivityManager connectivityManager =
-                    (ConnectivityManager)context.getSystemService( CONNECTIVITY_SERVICE );
-            if(connectivityManager.getActiveNetworkInfo() != null){
+                    (ConnectivityManager) context.getSystemService(CONNECTIVITY_SERVICE);
+            if (connectivityManager.getActiveNetworkInfo() != null) {
                 /*btnLogin.setEnabled( true );
                 btnLogin.setTextColor( Color.WHITE);*/
-            }else{
-                new Handler(  ).postDelayed(new Runnable() {
+            } else {
+                new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                        /* btnLogin.setTextColor( Color.rgb( 137, 137, 137 ));
                         btnLogin.setEnabled( false );*/
                         turnOnInternet();
                     }
-                }, 1000 );
+                }, 1000);
 
             }
         }
@@ -233,7 +270,7 @@ public class MainActivity extends AppCompatActivity
     private void turnOnInternet() {
 
 
-        Button yes,no;
+        Button yes, no;
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_network);
@@ -248,24 +285,25 @@ public class MainActivity extends AppCompatActivity
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WifiManager wifi = (WifiManager)getApplicationContext().getSystemService( WIFI_SERVICE );
-                wifi.setWifiEnabled( true );
+                WifiManager wifi = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+                wifi.setWifiEnabled(true);
                 dialog.dismiss();
             }
         });
         dialog.show();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        IntentFilter filter = new IntentFilter( ConnectivityManager.CONNECTIVITY_ACTION );
-        registerReceiver( checkInternet, filter );
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(checkInternet, filter);
     }
     //hủy bỏ
 
     @Override
     protected void onPause() {
         super.onPause();
-        unregisterReceiver( checkInternet );
+        unregisterReceiver(checkInternet);
     }
 }
