@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity
                 model_chat = new ArrayList<>();
                 adapter_chat = new Adapter_Chat(getBaseContext(),model_chat);
 
-                Dialog dialog = new Dialog(MainActivity.this);
+                final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.dialog_chat);
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -128,6 +128,13 @@ public class MainActivity extends AppCompatActivity
                 lvChat.setAdapter(adapter_chat);
                 edtMess = dialog.findViewById(R.id.edtChatbox);
                 Button btnSend = dialog.findViewById(R.id.btnChatboxSend);
+                Button back = dialog.findViewById(R.id.btnBackChat);
+                back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
                 btnSend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
