@@ -79,7 +79,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private void OnClickItem(Model_SP model) {
 
-        final Dialog dialog = new Dialog(context);
+        final Dialog dialog = new Dialog(context,android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_sp);
         dialog.show();

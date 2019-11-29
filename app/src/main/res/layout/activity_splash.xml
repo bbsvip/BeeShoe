@@ -31,4 +31,8 @@
         android:textColor="#ffd900"
         android:textSize="18sp"
         android:textStyle="italic" />
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/prgSplash"/>
 </LinearLayout>

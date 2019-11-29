@@ -29,4 +29,9 @@
     <string name="price_sp">Price SP</string>
     <string name="addCart">Thêm giỏ hàng</string>
     <string name="buyNow">Mua ngay</string>
+    <string name="tvRegister">Đăng ký</string>
+    <string name="btnRegister">Đăng ký</string>
+    <string name="rePassword">Nhập lại mật khẩu</string>
+    <string name="user">Tên tài khoản</string>
+    <string name="userName">Tên người dùng</string>
 </resources>

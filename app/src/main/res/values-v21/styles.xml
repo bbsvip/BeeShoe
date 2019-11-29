@@ -25,4 +25,12 @@
         <item name="android:colorFocusedHighlight">@color/colorPrimary</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+    <style name="CartActionButton" parent="AppTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:tint">@color/colorPrimaryDark</item>
+    </style>
+    <style name="ChatActionButton" parent="AppTheme">
+        <item name="colorAccent">#FF0037FF</item>
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
 </resources>

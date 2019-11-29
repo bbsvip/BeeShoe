@@ -41,9 +41,13 @@ import com.bbs.mr.beeshoe.R;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    String u, p, mUser;
+    String u, mUser;
+    boolean isLogin = false;
     //TextView tvCountCart ;
     public int countcart = 1;
+    boolean fisrtBack = false;
+    boolean fabHide = false;
+    FloatingActionButton fabCart, fabChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,17 +73,41 @@ public class MainActivity extends AppCompatActivity
             /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);*/
         } else {
+            isLogin = true;
             Toast.makeText(this, "Mừng bạn trở lại " + u, Toast.LENGTH_SHORT).show();
         }
 
         FloatingActionButton fab = findViewById(R.id.fab);
+        fabCart = findViewById(R.id.fabCart);
+        fabChat = findViewById(R.id.fabChat);
+        fabCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "CC", Toast.LENGTH_SHORT).show();
+            }
+        });
+        fabChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "CL", Toast.LENGTH_SHORT).show();
+            }
+        });
+        if (fabHide == false) {
+            fabCart.hide();
+            fabChat.hide();
+        }
         //tvCountCart = findViewById(R.id.tvCart);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Cart", Snackbar.LENGTH_LONG)
-                        .setAction("", null).show();
+                /*Snackbar.make(view, "Cart", Snackbar.LENGTH_LONG)
+                        .setAction("", null).show();*/
                 //Toast.makeText(MainActivity.this, "Cart", Toast.LENGTH_SHORT).show();
+                if (fabHide == false) {
+                    showFABMenu();
+                } else {
+                    closeFABMenu();
+                }
             }
         });
 
@@ -102,7 +130,13 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (!fisrtBack) {
+                Toast.makeText(this, "Nhấn trở lại một lần nữa để thoát", Toast.LENGTH_SHORT).show();
+                fisrtBack = true;
+            } else {
+                super.onBackPressed();
+            }
+
         }
     }
 
@@ -130,7 +164,16 @@ public class MainActivity extends AppCompatActivity
             inflater.inflate(R.menu.menu_acc, menuBuilder);
             MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, vItem);
             optionsMenu.setForceShowIcon(true);
-
+            if (isLogin) {
+                menuBuilder.getRootMenu().getItem(0).setTitle("Xin chào " + u);
+                menuBuilder.getRootMenu().getItem(1).setVisible(false);
+                menuBuilder.getRootMenu().getItem(2).setVisible(true);
+                menuBuilder.getRootMenu().getItem(3).setVisible(true);
+            } else {
+                menuBuilder.getRootMenu().getItem(1).setVisible(true);
+                menuBuilder.getRootMenu().getItem(2).setVisible(false);
+                menuBuilder.getRootMenu().getItem(3).setVisible(false);
+            }
             // Set Item Click Listener
             menuBuilder.setCallback(new MenuBuilder.Callback() {
                 @Override
@@ -139,11 +182,12 @@ public class MainActivity extends AppCompatActivity
                         case R.id.acc_login: // Handle option1 Click
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             return true;
-                        case R.id.acc_register: // Handle option2 Click
+                        case R.id.acc_register: // Handle option3 Click
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             return true;
-                        case R.id.acc_cart: // Handle option2 Click
+                        case R.id.acc_cart: // Handle option4 Click
                             return true;
-                        case R.id.acc_logout: // Handle option2 Click
+                        case R.id.acc_logout: // Handle option5 Click
                             return true;
                         default:
                             return false;
@@ -155,19 +199,9 @@ public class MainActivity extends AppCompatActivity
                 }
             });
 
-
             // Display the menu
             optionsMenu.show();
-            /*PopupMenu popup = new PopupMenu(this, vItem);
-            MenuInflater inflater = popup.getMenuInflater();
-            inflater.inflate(R.menu.menu_acc, popup.getMenu());
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    return false;
-                }
-            });
-            popup.show();*/
+
         } else if (id == R.id.nav_search) {
             Toast.makeText(this, "Search Actionbar", Toast.LENGTH_SHORT).show();
         }
@@ -203,11 +237,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     public int ckShap() {
-        SharedPreferences pref = getSharedPreferences("USER_FILE", MODE_PRIVATE);
-        boolean chk = pref.getBoolean("REMEMBER", false);
+        SharedPreferences pref = getSharedPreferences("USER", MODE_PRIVATE);
+        boolean chk = pref.getBoolean("LOGIN", false);
         if (chk) {
-            u = pref.getString("USERNAME", "");
-            p = pref.getString("PASSWORD", "");
+            u = pref.getString("USER", "");
+            //p = pref.getString("PASSWORD", "");
             return 1;
         }
         return -1;
@@ -242,7 +276,7 @@ public class MainActivity extends AppCompatActivity
     public void AddCart() {
         countcart++;
         //tvCountCart.setText(countcart);
-        Toast.makeText(this, "CC: "+countcart, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "CC: " + countcart, Toast.LENGTH_SHORT).show();
     }
 
     BroadcastReceiver checkInternet = new BroadcastReceiver() {
@@ -293,13 +327,28 @@ public class MainActivity extends AppCompatActivity
         dialog.show();
     }
 
+    private void showFABMenu() {
+        fabHide = true;
+        fabCart.show();
+        fabChat.show();
+        fabCart.animate().translationY(-getResources().getDimension(R.dimen.standard));
+        fabChat.animate().translationX(-getResources().getDimension(R.dimen.standard));
+    }
+
+    private void closeFABMenu() {
+        fabHide = false;
+        fabCart.hide();
+        fabChat.hide();
+        fabCart.animate().translationY(0);
+        fabChat.animate().translationX(0);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(checkInternet, filter);
     }
-    //hủy bỏ
 
     @Override
     protected void onPause() {
