@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/borrder_top"
+        android:gravity="center|left">
+
+        <Button
+            android:id="@+id/btnBackChat"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:layout_margin="25dp"
+            android:background="@drawable/ic_arrow_back_black_24dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/chatWhitMe"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:layout_weight="1">
+
+        <ListView
+            android:id="@+id/lvChat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_chatbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimaryDark"
+        android:minHeight="48dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtChatbox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/enterMess"
+            android:maxLines="6" />
+
+        <Button
+            android:id="@+id/btnChatboxSend"
+            android:layout_width="64dp"
+            android:layout_height="48dp"
+            android:background="@drawable/borrder"
+            android:fontFamily="sans-serif"
+            android:text="@string/sendMess"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+</LinearLayout>

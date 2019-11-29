@@ -9,12 +9,12 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,21 +22,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
+import com.bbs.mr.beeshoe.AutoChat;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nam;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
+import com.bbs.mr.beeshoe.Model.Model_Chat;
 import com.bbs.mr.beeshoe.R;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,6 +58,13 @@ public class MainActivity extends AppCompatActivity
     boolean fisrtBack = false;
     boolean fabHide = false;
     FloatingActionButton fabCart, fabChat;
+
+    ArrayList<Model_Chat> model_chat;
+    Adapter_Chat adapter_chat;
+    EditText edtMess;
+    static Random rand = new Random();
+    static String sender;
+    ListView lvChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +106,35 @@ public class MainActivity extends AppCompatActivity
         fabChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "CL", Toast.LENGTH_SHORT).show();
+                model_chat = new ArrayList<>();
+                adapter_chat = new Adapter_Chat(getBaseContext(),model_chat);
+
+                Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_chat);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int widthLcl = (int) (displayMetrics.widthPixels*0.9f);
+                int heightLcl = (int) (displayMetrics.heightPixels*0.5f);
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = widthLcl;
+                lp.height = heightLcl;
+                lp.gravity = Gravity.BOTTOM;
+                lp.horizontalMargin = 50;
+                dialog.getWindow().setAttributes(lp);
+                dialog.show();
+                lvChat = dialog.findViewById(R.id.lvChat);
+                lvChat.setAdapter(adapter_chat);
+                edtMess = dialog.findViewById(R.id.edtChatbox);
+                Button btnSend = dialog.findViewById(R.id.btnChatboxSend);
+                btnSend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sendMessage(edtMess.getText().toString());
+                    }
+                });
+
             }
         });
         if (fabHide == false) {
@@ -355,4 +400,74 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         unregisterReceiver(checkInternet);
     }
+
+    public void sendMessage(String mess)
+    {
+        if(mess.length() > 0)
+        {
+            edtMess.setText("");
+            addNewMessage(new Model_Chat(mess, true));
+            new SendMessage().execute();
+        }
+    }
+    void addNewMessage(Model_Chat model)
+    {
+        model_chat.add(model);
+        adapter_chat.notifyDataSetChanged();
+        lvChat.setSelection(model_chat.size()-1);
+    }
+    private class SendMessage extends AsyncTask<Void, String, String>
+    {
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                Thread.sleep(2000); //simulate a network call
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            this.publishProgress(String.format("Cửa hàng đang nhập!", sender));
+            try {
+                Thread.sleep(2000); //simulate a network call
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.publishProgress(String.format("Cửa hàng đang gửi!", sender));
+            try {
+                Thread.sleep(3000);//simulate a network call
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            return AutoChat.messages[rand.nextInt(AutoChat.messages.length-1)];
+
+
+        }
+        @Override
+        public void onProgressUpdate(String... v) {
+
+            if(model_chat.get(model_chat.size()-1).isStatusMessage)//check wether we have already added a status message
+            {
+                model_chat.get(model_chat.size()-1).setMessage(v[0]); //update the status for that
+                adapter_chat.notifyDataSetChanged();
+                lvChat.setSelection(model_chat.size()-1);
+            }
+            else{
+                addNewMessage(new Model_Chat(true,v[0])); //add new message, if there is no existing status message
+            }
+        }
+        @Override
+        protected void onPostExecute(String text) {
+            if(model_chat.get(model_chat.size()-1).isStatusMessage)//check if there is any status message, now remove it.
+            {
+                model_chat.remove(model_chat.size()-1);
+            }
+
+            addNewMessage(new Model_Chat(text, false)); // add the orignal message from server.
+        }
+
+
+    }
+
 }

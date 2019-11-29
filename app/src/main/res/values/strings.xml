@@ -34,4 +34,7 @@
     <string name="rePassword">Nhập lại mật khẩu</string>
     <string name="user">Tên tài khoản</string>
     <string name="userName">Tên người dùng</string>
+    <string name="chatWhitMe">Nhắn tin với cửa hàng</string>
+    <string name="enterMess">Nhập tin nhắn</string>
+    <string name="sendMess">Gửi</string>
 </resources>
