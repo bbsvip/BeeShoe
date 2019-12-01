@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
                             }
                             return true;
                         case R.id.acc_register: // Handle option3 Click
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                             return true;
                         case R.id.acc_cart: // Handle option4 Click
                             return true;
