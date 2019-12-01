@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">BeeShoe</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -13,4 +12,29 @@
     <string name="namesp">NameSP .......................</string>
     <string name="sale">%</string>
     <string name="sl">sl</string>
+    <string name="noInternet">Chưa có kết nối mạng!</string>
+    <string name="connectInternet">Bạn có muốn mở wifi?</string>
+    <string name="yes">Có</string>
+    <string name="no">Không</string>
+    <string name="register">Đăng ký</string>
+    <string name="or">Hoặc</string>
+    <string name="rememberMe">Nhớ tài khoản ?</string>
+    <string name="login">Đăng nhập</string>
+    <string name="passwork">Mật khẩu</string>
+    <string name="email">Email</string>
+    <string name="tvLogin">Đăng nhập</string>
+    <string name="infoSP">Thông tin chi tiết sản phẩm</string>
+    <string name="name_sp">Name SP</string>
+    <string name="info_sp">Info SP</string>
+    <string name="price_sp">Price SP</string>
+    <string name="addCart">Thêm giỏ hàng</string>
+    <string name="buyNow">Mua ngay</string>
+    <string name="tvRegister">Đăng ký</string>
+    <string name="btnRegister">Đăng ký</string>
+    <string name="rePassword">Nhập lại mật khẩu</string>
+    <string name="user">Tên tài khoản</string>
+    <string name="userName">Tên người dùng</string>
+    <string name="chatWhitMe">Nhắn tin với cửa hàng</string>
+    <string name="enterMess">Nhập tin nhắn</string>
+    <string name="sendMess">Gửi</string>
 </resources>

@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
 import com.bbs.mr.beeshoe.AutoChat;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Account;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nam;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     String u, mUser;
-    boolean isLogin = false;
+    static boolean isLogin = false;
     //TextView tvCountCart ;
     public int countcart = 1;
     boolean fisrtBack = false;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     static Random rand = new Random();
     static String sender;
     ListView lvChat;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +85,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        if (ckShap() < 0) {
-            //Toast.makeText(this, "Chưa đăng nhập", Toast.LENGTH_SHORT).show();
-            /*Intent i = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(i);*/
-        } else {
-            isLogin = true;
-            Toast.makeText(this, "Mừng bạn trở lại " + u, Toast.LENGTH_SHORT).show();
-        }
+        pref = getSharedPreferences("USER", MODE_PRIVATE);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fabCart = findViewById(R.id.fabCart);
@@ -101,11 +94,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "CC", Toast.LENGTH_SHORT).show();
+                closeFABMenu();
             }
         });
         fabChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeFABMenu();
                 model_chat = new ArrayList<>();
                 adapter_chat = new Adapter_Chat(getBaseContext(),model_chat);
 
@@ -217,7 +212,7 @@ public class MainActivity extends AppCompatActivity
             MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, vItem);
             optionsMenu.setForceShowIcon(true);
             if (isLogin) {
-                menuBuilder.getRootMenu().getItem(0).setTitle("Xin chào " + u);
+                menuBuilder.getRootMenu().getItem(0).setTitle("Xin chào " + pref.getString("NAME",null));
                 menuBuilder.getRootMenu().getItem(1).setVisible(false);
                 menuBuilder.getRootMenu().getItem(2).setVisible(true);
                 menuBuilder.getRootMenu().getItem(3).setVisible(true);
@@ -232,7 +227,12 @@ public class MainActivity extends AppCompatActivity
                 public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.acc_login: // Handle option1 Click
-                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            if(isLogin){
+                                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Account()).commit();
+                                setTitle("Tài khoản");
+                            } else {
+                                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                            }
                             return true;
                         case R.id.acc_register: // Handle option3 Click
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
@@ -240,6 +240,9 @@ public class MainActivity extends AppCompatActivity
                         case R.id.acc_cart: // Handle option4 Click
                             return true;
                         case R.id.acc_logout: // Handle option5 Click
+                            pref.edit().clear();
+                            Home();
+                            isLogin = false;
                             return true;
                         default:
                             return false;
@@ -278,7 +281,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_other) {
             Other();
         } else if (id == R.id.nav_drawer_acc) {
-            Toast.makeText(this, "Account", Toast.LENGTH_SHORT).show();
+            if (isLogin){
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Account()).commit();
+                setTitle("Tài khoản");
+            } else {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
         } else if (id == R.id.nav_setting) {
             Toast.makeText(this, "Setting", Toast.LENGTH_SHORT).show();
         }
@@ -398,6 +406,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
+            View v = this.getWindow().getDecorView();
+            v.setSystemUiVisibility(View.GONE);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            //for new api versions.
+            View decorView = getWindow().getDecorView();
+            int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            decorView.setSystemUiVisibility(uiOptions);
+        }
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(checkInternet, filter);
     }

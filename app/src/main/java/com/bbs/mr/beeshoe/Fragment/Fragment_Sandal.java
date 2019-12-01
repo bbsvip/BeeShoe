@@ -46,7 +46,7 @@ import java.util.Objects;
 
 public class Fragment_Sandal extends Fragment  {
     //String url = "http://hoadondientuquynhon.com/getAll.php";
-    String url = "https://mr-bbs.000webhostapp.com/getAll.php";
+    String url = "https://datnbbs.000webhostapp.com/getAll.php";
 
     private int sex = 0;
     private int pointType = 12;

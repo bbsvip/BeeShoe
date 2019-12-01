@@ -80,7 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:hint="@string/email"
+                        android:hint="@string/user"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:singleLine="true" />
@@ -104,6 +104,11 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/prgLogin"
+                    android:visibility="gone"/>
                 <Button
                     android:id="@+id/btnLogin"
                     android:layout_width="250dp"

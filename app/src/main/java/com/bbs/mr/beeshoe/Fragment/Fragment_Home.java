@@ -41,7 +41,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Fragment_Home extends Fragment {
-    String url = "https://mr-bbs.000webhostapp.com/getAll.php";
+    String url = "https://datnbbs.000webhostapp.com/getAll.php";
 
     private Button btnNam, btnNu, btnSandal, btnOther, btnAllNam, btnAllNu, btnAllSandal;
 
@@ -55,7 +55,6 @@ public class Fragment_Home extends Fragment {
     boolean isLoad = true;
     CountDownTimer countDown;
     ProgressBar prgNam, prgNu, prgSandal;
-
     ViewFlipper vf;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +80,6 @@ public class Fragment_Home extends Fragment {
         prgSandal = view.findViewById(R.id.prgRvSandal);
 
         GetSP(url);
-
 
         rcvNam.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
         rcvNu.setLayoutManager(new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false));
@@ -139,6 +137,7 @@ public class Fragment_Home extends Fragment {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }
+
     private void BtnClick() {
         btnNam.setOnClickListener(new View.OnClickListener() {
             @Override
