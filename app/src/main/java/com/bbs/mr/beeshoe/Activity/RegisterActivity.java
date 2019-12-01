@@ -67,18 +67,13 @@ public class RegisterActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
                         setSave(u);
                         startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        finish();
-                    } else if (u.equals("bbs") && p.equals("bbs")) {
-                        setSave(u);
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                        finish();
                     } else {
                         Toast.makeText(getApplicationContext(), "Email hoặc mật khẩu sai !", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
             case R.id.btnBackRegister:
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
                 break;
         }
     }
