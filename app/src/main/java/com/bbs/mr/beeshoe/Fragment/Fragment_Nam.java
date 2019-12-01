@@ -48,6 +48,8 @@ public class Fragment_Nam extends Fragment {
 
     //String url = "http://hoadondientuquynhon.com/getAll.php";
     String url = "https://datnbbs.000webhostapp.com/getAll.php";
+    //String url = "https://103.139.102.33/getAll.php";
+
 
     private int sex = 1;
     private int pointType = 0;

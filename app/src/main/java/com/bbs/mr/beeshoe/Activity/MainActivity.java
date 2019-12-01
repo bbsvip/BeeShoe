@@ -296,17 +296,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public int ckShap() {
-        SharedPreferences pref = getSharedPreferences("USER", MODE_PRIVATE);
-        boolean chk = pref.getBoolean("LOGIN", false);
-        if (chk) {
-            u = pref.getString("USER", "");
-            //p = pref.getString("PASSWORD", "");
-            return 1;
-        }
-        return -1;
-    }
-
     public void Home() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
         setTitle("Trang chủ");
@@ -425,6 +414,8 @@ public class MainActivity extends AppCompatActivity
         unregisterReceiver(checkInternet);
     }
 
+    //Gửi tin nhắn
+
     public void sendMessage(String mess)
     {
         if(mess.length() > 0)
@@ -440,6 +431,9 @@ public class MainActivity extends AppCompatActivity
         adapter_chat.notifyDataSetChanged();
         lvChat.setSelection(model_chat.size()-1);
     }
+
+
+    //Bot chat
     private class SendMessage extends AsyncTask<Void, String, String>
     {
         @Override

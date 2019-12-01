@@ -176,17 +176,10 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if(context instanceof MainActivity){
             ((MainActivity)context).AddCart();
         }
-        //Toast.makeText(context, "Them gio hang", Toast.LENGTH_SHORT).show();
     }
 
     private void OnClickBuy() {
         Toast.makeText(context, "Mua ngay .....", Toast.LENGTH_SHORT).show();
-        // inflate menu
-        /*PopupMenu popup = new PopupMenu(mContext, view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_album, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-        popup.show();*/
     }
 
     @Override
@@ -274,36 +267,4 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         });
 
     }
-
-    /*public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        public TextView name, gia;
-        public ImageView thumbnail;
-        public Button btn_add, btn_mua;
-        public RatingBar rating;
-
-
-        public ViewHolder(@NonNull View view) {
-            super(view);
-            name = view.findViewById(R.id.tv_name_sp);
-            gia = view.findViewById(R.id.tv_gia_sp);
-            thumbnail = view.findViewById(R.id.img_sp);
-            btn_add = view.findViewById(R.id.btn_them_gio_hang);
-            btn_mua = view.findViewById(R.id.btn_mua_ngay);
-            rating = view.findViewById(R.id.rating);
-        }
-
-        @Override
-        public void onClick(View v) {
-
-        }
-    }*/
-
-
-    //Test start
-
-    //Test end
-
-
-
 }
