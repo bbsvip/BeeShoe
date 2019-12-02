@@ -36,6 +36,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bbs.mr.beeshoe.Adapter.Adapter_Cart;
 import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
 import com.bbs.mr.beeshoe.AutoChat;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Account;
@@ -45,10 +46,12 @@ import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
+import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
 import com.bbs.mr.beeshoe.R;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
@@ -73,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     Button btnOrder,btnBackCart;
     TextView tvTotal;
     ListView lvCart;
+    List<Model_Cart> model_carts;
+    Adapter_Cart adapter_cart;
 
     SharedPreferences pref;
 
@@ -90,7 +95,14 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
 
+        model_carts = new ArrayList<>();
+        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
+        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
+        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
+        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
+
         model_chat = new ArrayList<>();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,6 +131,8 @@ public class MainActivity extends AppCompatActivity
                 btnOrder = dialog.findViewById(R.id.btnOrder);
                 tvTotal = dialog.findViewById(R.id.tvTotalCart);
                 lvCart = dialog.findViewById(R.id.lvCart);
+                adapter_cart = new Adapter_Cart(dialog.getContext(),model_carts);
+                lvCart.setAdapter(adapter_cart);
                 btnBackCart = dialog.findViewById(R.id.btnBackCart);
                 btnBackCart.setOnClickListener(new View.OnClickListener() {
                     @Override

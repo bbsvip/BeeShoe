@@ -43,6 +43,6 @@
     <string name="tvName">Tên người dùng:</string>
     <string name="tvCart">Giỏ hàng</string>
     <string name="btnOrder">Đặt hàng</string>
-    <string name="totalCart">Tổng tiền thanh toán:</string>
+    <string name="totalCart">Tổng tiền:</string>
     <string name="btnPay">Thanh toán</string>
 </resources>
