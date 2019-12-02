@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
@@ -41,6 +42,7 @@ import com.bbs.mr.beeshoe.Fragment.Fragment_Account;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nam;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
@@ -52,6 +54,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    NavigationView navigationView;
     String u, mUser;
     static boolean isLogin = false;
     //TextView tvCountCart ;
@@ -66,6 +69,11 @@ public class MainActivity extends AppCompatActivity
     static Random rand = new Random();
     static String sender;
     ListView lvChat;
+
+    Button btnOrder,btnBackCart;
+    TextView tvTotal;
+    ListView lvCart;
+
     SharedPreferences pref;
 
     @Override
@@ -82,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
 
+        model_chat = new ArrayList<>();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,7 +102,43 @@ public class MainActivity extends AppCompatActivity
         fabCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "CC", Toast.LENGTH_SHORT).show();
+                final Dialog dialog = new Dialog(MainActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_cart);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                DisplayMetrics displayMetrics = new DisplayMetrics();
+                MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+                int widthLcl = (int) (displayMetrics.widthPixels);
+                int heightLcl = (int) (displayMetrics.heightPixels*0.9f);
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = widthLcl;
+                lp.height = heightLcl;
+                lp.gravity = Gravity.CENTER;
+                dialog.getWindow().setAttributes(lp);
+                dialog.show();
+                btnOrder = dialog.findViewById(R.id.btnOrder);
+                tvTotal = dialog.findViewById(R.id.tvTotalCart);
+                lvCart = dialog.findViewById(R.id.lvCart);
+                btnBackCart = dialog.findViewById(R.id.btnBackCart);
+                btnBackCart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                btnOrder.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!isLogin){
+                            startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                        } else {
+                            dialog.dismiss();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
+                            setTitle("Thanh Toán");
+                        }
+                    }
+                });
+
                 closeFABMenu();
             }
         });
@@ -101,7 +146,6 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 closeFABMenu();
-                model_chat = new ArrayList<>();
                 adapter_chat = new Adapter_Chat(getBaseContext(),model_chat);
 
                 final Dialog dialog = new Dialog(MainActivity.this);
@@ -164,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
@@ -298,27 +342,32 @@ public class MainActivity extends AppCompatActivity
 
     public void Home() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
+        navigationView.setCheckedItem(R.id.nav_home);
         setTitle("Trang chủ");
 
     }
 
     public void GiayNam() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nam()).commit();
+        navigationView.setCheckedItem(R.id.nav_nam);
         setTitle("Giày nam");
     }
 
     public void GiayNu() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nu()).commit();
+        navigationView.setCheckedItem(R.id.nav_nu);
         setTitle("Giày nữ");
     }
 
     public void Sandal() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Sandal()).commit();
+        navigationView.setCheckedItem(R.id.nav_sandal);
         setTitle("Sandal - Dép");
     }
 
     public void Other() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Other()).commit();
+        navigationView.setCheckedItem(R.id.nav_other);
         setTitle("Phụ kiện khác");
     }
 
@@ -484,8 +533,6 @@ public class MainActivity extends AppCompatActivity
 
             addNewMessage(new Model_Chat(text, false)); // add the orignal message from server.
         }
-
-
     }
 
 }
