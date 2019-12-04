@@ -23,6 +23,7 @@ import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bbs.mr.beeshoe.Adapter.Adapter_Cart;
 import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
 import com.bbs.mr.beeshoe.AutoChat;
@@ -46,22 +53,29 @@ import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
+import com.bbs.mr.beeshoe.Model.Model_Acc;
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
 import com.bbs.mr.beeshoe.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    String url ="https://datnbbs.000webhostapp.com/getCart.php";
     NavigationView navigationView;
     String u, mUser;
     static boolean isLogin = false;
     //TextView tvCountCart ;
-    public int countcart = 1;
     boolean fisrtBack = false;
     boolean fabHide = false;
     FloatingActionButton fabCart, fabChat;
@@ -74,7 +88,7 @@ public class MainActivity extends AppCompatActivity
     ListView lvChat;
 
     Button btnOrder,btnBackCart;
-    TextView tvTotal;
+    TextView tvTotal,tvNotiCart;
     ListView lvCart;
     List<Model_Cart> model_carts;
     Adapter_Cart adapter_cart;
@@ -96,11 +110,6 @@ public class MainActivity extends AppCompatActivity
 
 
         model_carts = new ArrayList<>();
-        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
-        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
-        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
-        model_carts.add(new Model_Cart(1,123456,"CC123","https://scontent.fhan2-2.fna.fbcdn.net/v/t1.0-9/21752240_112273652852097_1759021735355028303_n.jpg?_nc_cat=111&_nc_eui2=AeGmnESSFxPnBorUMtJd4xUTmiANI7FGy4mj6TISljyyodxfxUHW2d0kcE3V1r6M05o7GOtEcWZEMdCCd82swA_hM1MW_4l-SFMpIMOgc_TvPA&_nc_ohc=1sjTYq3ztwgAQn6wI_h8DgE7Yhz-C653-E1Vi-VOdg4kuJ5iYHHFIa5AQ&_nc_ht=scontent.fhan2-2.fna&oh=b242965057129122c1d0457e137cbb7a&oe=5E40A657"));
-
         model_chat = new ArrayList<>();
 
         setContentView(R.layout.activity_main);
@@ -130,7 +139,17 @@ public class MainActivity extends AppCompatActivity
                 dialog.show();
                 btnOrder = dialog.findViewById(R.id.btnOrder);
                 tvTotal = dialog.findViewById(R.id.tvTotalCart);
+                tvNotiCart = dialog.findViewById(R.id.tvNotiCart);
                 lvCart = dialog.findViewById(R.id.lvCart);
+                if (model_carts.isEmpty()){
+                    tvNotiCart.setVisibility(View.VISIBLE);
+                    lvCart.setVisibility(View.GONE);
+                    btnOrder.setVisibility(View.GONE);
+                } else {
+                    tvNotiCart.setVisibility(View.GONE);
+                    lvCart.setVisibility(View.VISIBLE);
+                    btnOrder.setVisibility(View.VISIBLE);
+                }
                 adapter_cart = new Adapter_Cart(dialog.getContext(),model_carts);
                 lvCart.setAdapter(adapter_cart);
                 btnBackCart = dialog.findViewById(R.id.btnBackCart);
@@ -385,10 +404,9 @@ public class MainActivity extends AppCompatActivity
         setTitle("Phụ kiện khác");
     }
 
-    public void AddCart() {
-        countcart++;
-        //tvCountCart.setText(countcart);
-        Toast.makeText(this, "CC: " + countcart, Toast.LENGTH_SHORT).show();
+    public void AddCart(String img,String name,double gia) {
+        model_carts.add(new Model_Cart(1,gia,name,img));
+        Toast.makeText(this, "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
     }
 
     BroadcastReceiver checkInternet = new BroadcastReceiver() {
@@ -548,5 +566,4 @@ public class MainActivity extends AppCompatActivity
             addNewMessage(new Model_Chat(text, false)); // add the orignal message from server.
         }
     }
-
 }

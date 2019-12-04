@@ -1,15 +1,14 @@
 package com.bbs.mr.beeshoe.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.R;
@@ -25,7 +24,6 @@ public class Adapter_Cart extends BaseAdapter {
 
     Context context;
     List<Model_Cart> model;
-    int Numsl = 1;
 
     public Adapter_Cart(Context context, List<Model_Cart> model) {
         this.context = context;
@@ -48,7 +46,7 @@ public class Adapter_Cart extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
         DecimalFormat df = new DecimalFormat("#,###");
         final ViewHolder holder;
         if (view == null) {
@@ -64,16 +62,16 @@ public class Adapter_Cart extends BaseAdapter {
         } else {
             holder = (ViewHolder) view.getTag();
         }
-        Model_Cart modelCart = model.get(position);
+        final Model_Cart modelCart = model.get(position);
         holder.name.setText(String.valueOf(modelCart.getName()));
         holder.gia.setText(String.valueOf(df.format(modelCart.getGia())) + " VND");
-        //holder.sl.setText(String.valueOf(Numsl));
+        holder.sl.setText(String.valueOf(modelCart.getSl_cart()));
         if (!modelCart.getImg().isEmpty()) {
             Picasso.get().load(String.valueOf(modelCart.getImg())).into(holder.img);
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.img);
         }
-        if (Numsl == 0) {
+        if (model.get(position).getSl_cart() == 0) {
             holder.tru.setEnabled(false);
         } else {
             holder.tru.setEnabled(true);
@@ -81,16 +79,20 @@ public class Adapter_Cart extends BaseAdapter {
         holder.cong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Numsl+=1;
-                holder.sl.setText(String.valueOf(Numsl));
+                int count = model.get(position).getSl_cart();
+                count = count + 1;
+                Log.e("cc         ", "onClick: " + count);
+                model.get(position).setSl_cart(count);  //update your list like this
                 notifyDataSetChanged();
             }
         });
         holder.tru.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Numsl-=1;
-                holder.sl.setText(String.valueOf(Numsl));
+                int count = model.get(position).getSl_cart();
+                count = count - 1;
+                Log.e("cc         ", "onClick: " + count);
+                model.get(position).setSl_cart(count);  //update your list like this
                 notifyDataSetChanged();
             }
         });
