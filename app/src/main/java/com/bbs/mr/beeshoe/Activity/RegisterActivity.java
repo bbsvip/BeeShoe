@@ -9,15 +9,28 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bbs.mr.beeshoe.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -29,6 +42,11 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText repass;
     private EditText email, name;
     private SharedPreferences spr;
+    String url = "https://datnbbs.000webhostapp.com/register.php";
+    boolean isRegisted = false;
+    ProgressBar prg;
+    CountDownTimer countDown;
+    String u;
 
 
     @Override
@@ -48,28 +66,24 @@ public class RegisterActivity extends AppCompatActivity {
         repass = findViewById(R.id.edtRePassRegister);
         email = findViewById(R.id.edtEmailRegister);
         name = findViewById(R.id.edtNameRegister);
+        prg = findViewById(R.id.prgRegister);
     }
 
     public void ButtonClick(View view) {
         switch (view.getId()) {
             case R.id.btnLoginRe:
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                finish();
                 break;
             case R.id.btnRegisterRe:
-                String u = user.getText().toString(), p = pass.getText().toString();
+                u = user.getText().toString(); String p = pass.getText().toString();
                 if (u.isEmpty()) {
                     Toast.makeText(this, "Chưa nhập email !", Toast.LENGTH_SHORT).show();
                 } else if (p.isEmpty()) {
                     Toast.makeText(this, "Chưa nhập mật khẩu !", Toast.LENGTH_SHORT).show();
                 } else {
-                    //Boolean chk = db.checkLogin(u, p);
-                    if (CheckRegister()) {
-                        Toast.makeText(getApplicationContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
-                        setSave(u);
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Email hoặc mật khẩu sai !", Toast.LENGTH_SHORT).show();
-                    }
+                    Register();
+                    WaitForLoad();
                 }
                 break;
             case R.id.btnBackRegister:
@@ -78,8 +92,39 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    private boolean CheckRegister() {
-        return true;
+    private void Register() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                prg.setVisibility(View.VISIBLE);
+                login.setVisibility(View.GONE);
+                register.setVisibility(View.GONE);
+                if (response.equals("success")){
+                    isRegisted = true;
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("clclclclclclc         ", "onErrorResponse: " + error.getMessage());
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user", user.getText().toString());
+                params.put("pass", pass.getText().toString());
+                params.put("user_name", name.getText().toString());
+                params.put("user_email", email.getText().toString());
+                return params;
+            }
+            @Override
+            public Priority getPriority() {
+                return Priority.IMMEDIATE;
+            }
+        };
+        RequestQueue request = Volley.newRequestQueue(RegisterActivity.this);
+        request.add(stringRequest);
     }
 
     public void setSave(String user) {
@@ -150,5 +195,27 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         unregisterReceiver(checkInternet);
+    }
+    private void WaitForLoad() {
+        countDown = new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                prg.setVisibility(View.VISIBLE);
+                login.setVisibility(View.GONE);
+                register.setVisibility(View.GONE);
+                if (isRegisted) {
+                    Toast.makeText(getApplicationContext(), "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                    setSave(u);
+                    cancel();
+                    finish();
+                }
+            }
+
+            public void onFinish() {
+                prg.setVisibility(View.GONE);
+                login.setVisibility(View.VISIBLE);
+                register.setVisibility(View.VISIBLE);
+            }
+        }.start();
     }
 }
