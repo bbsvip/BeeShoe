@@ -121,6 +121,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         rtb.setRating(model.getRate());
         if(!model.getThump().isEmpty()){
             Picasso.get().load(String.valueOf(model.getThump())).into(img_info);
+            urlImg = "";
             urlImg = model.getThump();
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(img_info);
@@ -246,6 +247,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         holder.gia_goc.setText(String.valueOf(df.format(model.getGia()+((model.getGia()*50f)/100f))));
         if(!model.getThump().isEmpty()){
             Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
+            urlImg = "";
             urlImg = model.getThump();
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.thumbnail);

@@ -525,13 +525,13 @@ public class MainActivity extends AppCompatActivity
                 e.printStackTrace();
             }
 
-            this.publishProgress(String.format("Cửa hàng đang nhập!", sender));
+            this.publishProgress(String.format(". . .", sender));
             try {
                 Thread.sleep(2000); //simulate a network call
             }catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            this.publishProgress(String.format("Cửa hàng đang gửi!", sender));
+            this.publishProgress(String.format("...", sender));
             try {
                 Thread.sleep(3000);//simulate a network call
             }catch (InterruptedException e) {

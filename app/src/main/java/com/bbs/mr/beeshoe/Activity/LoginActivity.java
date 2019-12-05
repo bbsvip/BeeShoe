@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText pass;
     private CheckBox chk;
     private SharedPreferences spr;
-    String url = "https://datnbbs.000webhostapp.com/CheckAcc.php";
+    String url = "https://datnbbs.000webhostapp.com/login.php";
     List<Model_Acc> list;
     boolean chkAcc = false;
     String u, p;
