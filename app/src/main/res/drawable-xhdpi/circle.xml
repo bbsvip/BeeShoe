@@ -1,3 +1,9 @@
+<!-- Copyright (c) 2019. -->
+<!-- Tạo bởi Cừu Đen -->
+<!-- -->
+<!-- Gmail: 0331999bbs@gmail.com -->
+<!-- Phone: 0347079556 -->
+
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <solid android:color="@color/colorPrimaryDark"/>

@@ -1,3 +1,9 @@
+// Copyright (c) 2019.
+// Tạo bởi Cừu Đen
+//
+// Gmail: 0331999bbs@gmail.com
+// Phone: 0347079556
+
 package com.bbs.mr.beeshoe.Fragment;
 
 import android.content.SharedPreferences;

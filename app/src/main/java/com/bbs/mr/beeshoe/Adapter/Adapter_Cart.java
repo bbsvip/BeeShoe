@@ -1,3 +1,9 @@
+// Copyright (c) 2019.
+// Tạo bởi Cừu Đen
+//
+// Gmail: 0331999bbs@gmail.com
+// Phone: 0347079556
+
 package com.bbs.mr.beeshoe.Adapter;
 
 import android.content.Context;
@@ -10,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bbs.mr.beeshoe.Activity.MainActivity;
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.R;
 import com.squareup.picasso.Picasso;
@@ -83,6 +90,7 @@ public class Adapter_Cart extends BaseAdapter {
                 count = count + 1;
                 Log.e("cc         ", "onClick: " + count);
                 model.get(position).setSl_cart(count);  //update your list like this
+                MainActivity.isUpSL = true;
                 notifyDataSetChanged();
             }
         });
@@ -93,6 +101,7 @@ public class Adapter_Cart extends BaseAdapter {
                 count = count - 1;
                 Log.e("cc         ", "onClick: " + count);
                 model.get(position).setSl_cart(count);  //update your list like this
+                MainActivity.isUpSL = true;
                 notifyDataSetChanged();
             }
         });

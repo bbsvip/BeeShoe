@@ -1,3 +1,9 @@
+// Copyright (c) 2019.
+// Tạo bởi Cừu Đen
+//
+// Gmail: 0331999bbs@gmail.com
+// Phone: 0347079556
+
 package com.bbs.mr.beeshoe.Activity;
 
 import android.annotation.SuppressLint;
@@ -62,6 +68,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,7 +78,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    String url ="https://datnbbs.000webhostapp.com/getCart.php";
+    String url = "https://datnbbs.000webhostapp.com/getCart.php";
     NavigationView navigationView;
     String u, mUser;
     static boolean isLogin = false;
@@ -87,11 +94,15 @@ public class MainActivity extends AppCompatActivity
     static String sender;
     ListView lvChat;
 
-    Button btnOrder,btnBackCart;
-    TextView tvTotal,tvNotiCart;
+    Button btnOrder, btnBackCart;
+    TextView tvTotal, tvNotiCart;
     ListView lvCart;
     List<Model_Cart> model_carts;
     Adapter_Cart adapter_cart;
+    double x = 0;
+    DecimalFormat df;
+    public static boolean isUpSL = false;
+    double total;
 
     SharedPreferences pref;
 
@@ -112,6 +123,7 @@ public class MainActivity extends AppCompatActivity
         model_carts = new ArrayList<>();
         model_chat = new ArrayList<>();
 
+        df = new DecimalFormat("#,###");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -123,55 +135,7 @@ public class MainActivity extends AppCompatActivity
         fabCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(MainActivity.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.dialog_cart);
-                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                DisplayMetrics displayMetrics = new DisplayMetrics();
-                MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int widthLcl = (int) (displayMetrics.widthPixels);
-                int heightLcl = (int) (displayMetrics.heightPixels*0.9f);
-                lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = widthLcl;
-                lp.height = heightLcl;
-                lp.gravity = Gravity.CENTER;
-                dialog.getWindow().setAttributes(lp);
-                dialog.show();
-                btnOrder = dialog.findViewById(R.id.btnOrder);
-                tvTotal = dialog.findViewById(R.id.tvTotalCart);
-                tvNotiCart = dialog.findViewById(R.id.tvNotiCart);
-                lvCart = dialog.findViewById(R.id.lvCart);
-                if (model_carts.isEmpty()){
-                    tvNotiCart.setVisibility(View.VISIBLE);
-                    lvCart.setVisibility(View.GONE);
-                    btnOrder.setVisibility(View.GONE);
-                } else {
-                    tvNotiCart.setVisibility(View.GONE);
-                    lvCart.setVisibility(View.VISIBLE);
-                    btnOrder.setVisibility(View.VISIBLE);
-                }
-                adapter_cart = new Adapter_Cart(dialog.getContext(),model_carts);
-                lvCart.setAdapter(adapter_cart);
-                btnBackCart = dialog.findViewById(R.id.btnBackCart);
-                btnBackCart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                btnOrder.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (!isLogin){
-                            startActivity(new Intent(MainActivity.this,LoginActivity.class));
-                        } else {
-                            dialog.dismiss();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
-                            setTitle("Thanh Toán");
-                        }
-                    }
-                });
-
+                DialogCart();
                 closeFABMenu();
             }
         });
@@ -179,7 +143,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 closeFABMenu();
-                adapter_chat = new Adapter_Chat(getBaseContext(),model_chat);
+                adapter_chat = new Adapter_Chat(getBaseContext(), model_chat);
 
                 final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -187,8 +151,8 @@ public class MainActivity extends AppCompatActivity
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                int widthLcl = (int) (displayMetrics.widthPixels*0.9f);
-                int heightLcl = (int) (displayMetrics.heightPixels*0.5f);
+                int widthLcl = (int) (displayMetrics.widthPixels * 0.9f);
+                int heightLcl = (int) (displayMetrics.heightPixels * 0.5f);
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = widthLcl;
                 lp.height = heightLcl;
@@ -248,6 +212,64 @@ public class MainActivity extends AppCompatActivity
         setTitle("Trang chủ");
     }
 
+    private void DialogCart() {
+        final Dialog dialog = new Dialog(MainActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_cart);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int widthLcl = (int) (displayMetrics.widthPixels);
+        int heightLcl = (int) (displayMetrics.heightPixels * 0.9f);
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = widthLcl;
+        lp.height = heightLcl;
+        lp.gravity = Gravity.CENTER;
+        dialog.getWindow().setAttributes(lp);
+        dialog.show();
+        btnOrder = dialog.findViewById(R.id.btnOrder);
+        tvTotal = dialog.findViewById(R.id.tvTotalCart);
+        tvNotiCart = dialog.findViewById(R.id.tvNotiCart);
+        lvCart = dialog.findViewById(R.id.lvCart);
+        if (model_carts.isEmpty()) {
+            tvNotiCart.setVisibility(View.VISIBLE);
+            lvCart.setVisibility(View.GONE);
+            btnOrder.setVisibility(View.GONE);
+        } else {
+            tvNotiCart.setVisibility(View.GONE);
+            lvCart.setVisibility(View.VISIBLE);
+            btnOrder.setVisibility(View.VISIBLE);
+        }
+        adapter_cart = new Adapter_Cart(dialog.getContext(), model_carts);
+        lvCart.setAdapter(adapter_cart);
+        for (int i = 0; i < model_carts.size(); i++) {
+            total = model_carts.get(i).getGia() * model_carts.get(i).getSl_cart();
+            x += total;
+        }
+        tvTotal.setText(String.valueOf(df.format(x)) + " VND");
+
+        btnBackCart = dialog.findViewById(R.id.btnBackCart);
+        btnBackCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isLogin) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                } else {
+                    dialog.dismiss();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
+                    setTitle("Thanh Toán");
+                }
+            }
+        });
+
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -289,7 +311,7 @@ public class MainActivity extends AppCompatActivity
             MenuPopupHelper optionsMenu = new MenuPopupHelper(this, menuBuilder, vItem);
             optionsMenu.setForceShowIcon(true);
             if (isLogin) {
-                menuBuilder.getRootMenu().getItem(0).setTitle("Xin chào " + pref.getString("NAME",null));
+                menuBuilder.getRootMenu().getItem(0).setTitle("Xin chào " + pref.getString("NAME", null));
                 menuBuilder.getRootMenu().getItem(1).setVisible(false);
                 menuBuilder.getRootMenu().getItem(2).setVisible(true);
                 menuBuilder.getRootMenu().getItem(3).setVisible(true);
@@ -304,7 +326,7 @@ public class MainActivity extends AppCompatActivity
                 public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.acc_login: // Handle option1 Click
-                            if(isLogin){
+                            if (isLogin) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Account()).commit();
                                 setTitle("Tài khoản");
                             } else {
@@ -315,6 +337,7 @@ public class MainActivity extends AppCompatActivity
                             startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                             return true;
                         case R.id.acc_cart: // Handle option4 Click
+                            DialogCart();
                             return true;
                         case R.id.acc_logout: // Handle option5 Click
                             pref.edit().clear();
@@ -358,7 +381,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_other) {
             Other();
         } else if (id == R.id.nav_drawer_acc) {
-            if (isLogin){
+            if (isLogin) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Account()).commit();
                 setTitle("Tài khoản");
             } else {
@@ -404,8 +427,8 @@ public class MainActivity extends AppCompatActivity
         setTitle("Phụ kiện khác");
     }
 
-    public void AddCart(String img,String name,double gia) {
-        model_carts.add(new Model_Cart(1,gia,name,img));
+    public void AddCart(String img, String name, double gia) {
+        model_carts.add(new Model_Cart(1, gia, name, img));
         Toast.makeText(this, "Thêm vào giỏ hàng thành công!", Toast.LENGTH_SHORT).show();
     }
 
@@ -497,70 +520,68 @@ public class MainActivity extends AppCompatActivity
 
     //Gửi tin nhắn
 
-    public void sendMessage(String mess)
-    {
-        if(mess.length() > 0)
-        {
+    public void sendMessage(String mess) {
+        if (mess.length() > 0) {
             edtMess.setText("");
             addNewMessage(new Model_Chat(mess, true));
             new SendMessage().execute();
         }
     }
-    void addNewMessage(Model_Chat model)
-    {
+
+    void addNewMessage(Model_Chat model) {
         model_chat.add(model);
         adapter_chat.notifyDataSetChanged();
-        lvChat.setSelection(model_chat.size()-1);
+        lvChat.setSelection(model_chat.size() - 1);
     }
 
 
     //Bot chat
-    private class SendMessage extends AsyncTask<Void, String, String>
-    {
+    private class SendMessage extends AsyncTask<Void, String, String> {
         @Override
         protected String doInBackground(Void... params) {
             try {
                 Thread.sleep(2000); //simulate a network call
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             this.publishProgress(String.format(". . .", sender));
             try {
                 Thread.sleep(2000); //simulate a network call
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             this.publishProgress(String.format("...", sender));
             try {
                 Thread.sleep(3000);//simulate a network call
-            }catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
 
-            return AutoChat.messages[rand.nextInt(AutoChat.messages.length-1)];
+            return AutoChat.messages[rand.nextInt(AutoChat.messages.length - 1)];
 
 
         }
+
         @Override
         public void onProgressUpdate(String... v) {
 
-            if(model_chat.get(model_chat.size()-1).isStatusMessage)//check wether we have already added a status message
+            if (model_chat.get(model_chat.size() - 1).isStatusMessage)//check wether we have already added a status message
             {
-                model_chat.get(model_chat.size()-1).setMessage(v[0]); //update the status for that
+                model_chat.get(model_chat.size() - 1).setMessage(v[0]); //update the status for that
                 adapter_chat.notifyDataSetChanged();
-                lvChat.setSelection(model_chat.size()-1);
-            }
-            else{
-                addNewMessage(new Model_Chat(true,v[0])); //add new message, if there is no existing status message
+                lvChat.setSelection(model_chat.size() - 1);
+            } else {
+                addNewMessage(new Model_Chat(true, v[0])); //add new message, if there is no existing status message
             }
         }
+
         @Override
         protected void onPostExecute(String text) {
-            if(model_chat.get(model_chat.size()-1).isStatusMessage)//check if there is any status message, now remove it.
+            if (model_chat.get(model_chat.size() - 1).isStatusMessage)//check if there is any status message, now remove it.
             {
-                model_chat.remove(model_chat.size()-1);
+                model_chat.remove(model_chat.size() - 1);
             }
 
             addNewMessage(new Model_Chat(text, false)); // add the orignal message from server.
