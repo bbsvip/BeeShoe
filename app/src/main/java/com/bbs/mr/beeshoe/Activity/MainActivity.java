@@ -18,6 +18,7 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -29,7 +30,6 @@ import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,12 +43,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bbs.mr.beeshoe.Adapter.Adapter_Cart;
 import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
 import com.bbs.mr.beeshoe.AutoChat;
@@ -59,20 +53,13 @@ import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
-import com.bbs.mr.beeshoe.Model.Model_Acc;
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
 import com.bbs.mr.beeshoe.R;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
@@ -94,6 +81,7 @@ public class MainActivity extends AppCompatActivity
     static String sender;
     ListView lvChat;
 
+    Dialog dialog_cart;
     Button btnOrder, btnBackCart;
     TextView tvTotal, tvNotiCart;
     ListView lvCart;
@@ -103,6 +91,7 @@ public class MainActivity extends AppCompatActivity
     DecimalFormat df;
     public static boolean isUpSL = false;
     double total;
+
 
     SharedPreferences pref;
 
@@ -122,6 +111,7 @@ public class MainActivity extends AppCompatActivity
 
         model_carts = new ArrayList<>();
         model_chat = new ArrayList<>();
+        dialog_cart = new Dialog(MainActivity.this);
 
         df = new DecimalFormat("#,###");
         setContentView(R.layout.activity_main);
@@ -213,24 +203,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void DialogCart() {
-        final Dialog dialog = new Dialog(MainActivity.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_cart);
+        dialog_cart.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog_cart.setContentView(R.layout.dialog_cart);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         MainActivity.this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int widthLcl = (int) (displayMetrics.widthPixels);
         int heightLcl = (int) (displayMetrics.heightPixels * 0.9f);
-        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.copyFrom(dialog_cart.getWindow().getAttributes());
         lp.width = widthLcl;
         lp.height = heightLcl;
         lp.gravity = Gravity.CENTER;
-        dialog.getWindow().setAttributes(lp);
-        dialog.show();
-        btnOrder = dialog.findViewById(R.id.btnOrder);
-        tvTotal = dialog.findViewById(R.id.tvTotalCart);
-        tvNotiCart = dialog.findViewById(R.id.tvNotiCart);
-        lvCart = dialog.findViewById(R.id.lvCart);
+        dialog_cart.getWindow().setAttributes(lp);
+        dialog_cart.show();
+        btnOrder = dialog_cart.findViewById(R.id.btnOrder);
+        tvTotal = dialog_cart.findViewById(R.id.tvTotalCart);
+        tvNotiCart = dialog_cart.findViewById(R.id.tvNotiCart);
+        lvCart = dialog_cart.findViewById(R.id.lvCart);
         if (model_carts.isEmpty()) {
             tvNotiCart.setVisibility(View.VISIBLE);
             lvCart.setVisibility(View.GONE);
@@ -240,7 +229,7 @@ public class MainActivity extends AppCompatActivity
             lvCart.setVisibility(View.VISIBLE);
             btnOrder.setVisibility(View.VISIBLE);
         }
-        adapter_cart = new Adapter_Cart(dialog.getContext(), model_carts);
+        adapter_cart = new Adapter_Cart(dialog_cart.getContext(), model_carts);
         lvCart.setAdapter(adapter_cart);
         for (int i = 0; i < model_carts.size(); i++) {
             total = model_carts.get(i).getGia() * model_carts.get(i).getSl_cart();
@@ -248,11 +237,11 @@ public class MainActivity extends AppCompatActivity
         }
         tvTotal.setText(String.valueOf(df.format(x)) + " VND");
 
-        btnBackCart = dialog.findViewById(R.id.btnBackCart);
+        btnBackCart = dialog_cart.findViewById(R.id.btnBackCart);
         btnBackCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dialog_cart.dismiss();
             }
         });
         btnOrder.setOnClickListener(new View.OnClickListener() {
@@ -261,13 +250,13 @@ public class MainActivity extends AppCompatActivity
                 if (!isLogin) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 } else {
-                    dialog.dismiss();
+                    dialog_cart.dismiss();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
                     setTitle("Thanh Toán");
+
                 }
             }
         });
-
     }
 
     @Override
