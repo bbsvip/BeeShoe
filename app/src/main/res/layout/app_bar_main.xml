@@ -1,9 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2019. -->
-<!-- Tạo bởi Cừu Đen -->
-<!-- -->
-<!-- Gmail: 0331999bbs@gmail.com -->
-<!-- Phone: 0347079556 -->
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (c) 2019. --><!-- Tạo bởi Cừu Đen --><!-- --><!-- Gmail: 0331999bbs@gmail.com --><!-- Phone: 0347079556 -->
 
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -25,6 +20,16 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
+    <com.miguelcatalan.materialsearchview.MaterialSearchView
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:hint="@string/search"
+        app:searchCloseIcon="@drawable/ic_close_black_24dp"
+        app:searchBackIcon="@drawable/ic_arrow_back_black"
+        app:searchBackground="@color/colorPrimary" />
 
     <include layout="@layout/content_main" />
 
@@ -53,9 +58,9 @@
         style="@style/ChatActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:backgroundTint="#FF0037FF"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        app:backgroundTint="#FF0037FF"
         app:srcCompat="@drawable/ic_chat_black_24dp"
         tools:ignore="VectorDrawableCompat" />
 

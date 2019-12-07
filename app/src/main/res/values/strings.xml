@@ -52,4 +52,6 @@
     <string name="totalCart">Tổng tiền:</string>
     <string name="btnPay">Thanh toán</string>
     <string name="tvAccOrder">Các sản phẩm đã mua</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="notFound">Không tìm thấy sản phẩm bạn yêu cầu!</string>
 </resources>

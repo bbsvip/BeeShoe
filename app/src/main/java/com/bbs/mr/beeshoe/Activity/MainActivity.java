@@ -18,10 +18,11 @@ import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,9 +54,12 @@ import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Search;
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
+import com.bbs.mr.beeshoe.Model.Model_SP;
 import com.bbs.mr.beeshoe.R;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -91,6 +95,9 @@ public class MainActivity extends AppCompatActivity
     DecimalFormat df;
     public static boolean isUpSL = false;
     double total;
+
+    MaterialSearchView searchView;
+    Fragment_Search fragment;
 
 
     SharedPreferences pref;
@@ -200,6 +207,8 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
         setTitle("Trang chủ");
+        searchView = findViewById(R.id.search_bar);
+        Search();
     }
 
     private void DialogCart() {
@@ -259,10 +268,63 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void Search() {
+        /*List<Model_SP> list = new ArrayList<>();
+        Fragment_Search.model*/
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text) {
+                fragment = (Fragment_Search) getSupportFragmentManager().findFragmentByTag("FragmentSearch");
+                if (text != null && !text.isEmpty()) {
+                    List<Model_SP> list = new ArrayList<>();
+                    for (Model_SP item : Fragment_Search.model) {
+                        if (item.getName().toLowerCase().contains(text)||item.getName().toLowerCase().contains(text.toLowerCase())) {
+                            list.add(item);
+                            fragment.IsFound(true);
+                        }
+                    }
+                    if (list.isEmpty()){
+                        fragment.IsFound(false);
+                    }
+                    fragment.SetAdapter(list);
+                } else {
+                    if(!Fragment_Search.isLoad){
+                        fragment.SetAdapter(Fragment_Search.model);
+                        fragment.IsFound(true);
+                    }
+                }
+                return true;
+            }
+        });
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                fragment = new Fragment_Search();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, "FragmentSearch").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                setTitle("Tìm kiếm");
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
+                navigationView.setCheckedItem(R.id.nav_home);
+                setTitle("Trang chủ");
+            }
+        });
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
+        } else if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (!fisrtBack) {
@@ -279,6 +341,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.nav_search);
+        searchView.setMenuItem(item);
         return true;
     }
 
@@ -347,7 +411,7 @@ public class MainActivity extends AppCompatActivity
             optionsMenu.show();
 
         } else if (id == R.id.nav_search) {
-            Toast.makeText(this, "Search Actionbar", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);

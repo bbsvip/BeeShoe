@@ -50,5 +50,7 @@ dependencies {
     implementation 'com.android.volley:volley:1.1.1'
     //Thống kê
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    //Search
+    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
 
 }
