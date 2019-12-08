@@ -7,29 +7,30 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    </android.support.design.widget.AppBarLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/search_bar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:hint="@string/search"
+                android:textColor="@color/colorPrimaryDark"
+                app:searchBackIcon="@drawable/ic_arrow_back_black"
+                app:searchBackground="@color/colorPrimary"
+                app:searchCloseIcon="@drawable/ic_close_black_24dp" />
+        </android.support.design.widget.AppBarLayout>
 
-    <com.miguelcatalan.materialsearchview.MaterialSearchView
-        android:id="@+id/search_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:hint="@string/search"
-        app:searchCloseIcon="@drawable/ic_close_black_24dp"
-        app:searchBackIcon="@drawable/ic_arrow_back_black"
-        app:searchBackground="@color/colorPrimary" />
+
+
 
     <include layout="@layout/content_main" />
 

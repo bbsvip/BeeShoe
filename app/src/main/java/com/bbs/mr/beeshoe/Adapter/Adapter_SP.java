@@ -255,9 +255,11 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             Picasso.get().load(String.valueOf(model.getThump())).into(holder.thumbnail);
             urlImg = "";
             urlImg = model.getThump();
+            holder.thumbnail.setMaxWidth(200);
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.thumbnail);
             urlImg = "https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f";
+            holder.thumbnail.setMaxWidth(200);
         }
 
         holder.btn_mua.setOnClickListener(new View.OnClickListener() {

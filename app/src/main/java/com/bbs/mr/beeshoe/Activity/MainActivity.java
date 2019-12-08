@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity
 
     MaterialSearchView searchView;
     Fragment_Search fragment;
+    Toolbar toolbar;
 
 
     SharedPreferences pref;
@@ -118,11 +119,11 @@ public class MainActivity extends AppCompatActivity
 
         model_carts = new ArrayList<>();
         model_chat = new ArrayList<>();
-        dialog_cart = new Dialog(MainActivity.this);
+
 
         df = new DecimalFormat("#,###");
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         pref = getSharedPreferences("USER", MODE_PRIVATE);
 
@@ -212,6 +213,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void DialogCart() {
+        dialog_cart = new Dialog(MainActivity.this);
         dialog_cart.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog_cart.setContentView(R.layout.dialog_cart);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -308,6 +310,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, "FragmentSearch").commit();
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 setTitle("Tìm kiếm");
+                toolbar.setVisibility(View.GONE);
             }
 
             @Override
@@ -315,6 +318,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
                 navigationView.setCheckedItem(R.id.nav_home);
                 setTitle("Trang chủ");
+                toolbar.setVisibility(View.VISIBLE);
             }
         });
     }
