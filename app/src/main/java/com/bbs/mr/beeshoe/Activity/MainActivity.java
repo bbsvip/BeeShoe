@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity
     TextView tvTotal, tvNotiCart;
     ListView lvCart;
     List<Model_Cart> model_carts;
+    public static List<Model_Cart> listCart;
     Adapter_Cart adapter_cart;
     double x = 0;
     DecimalFormat df;
@@ -97,9 +98,8 @@ public class MainActivity extends AppCompatActivity
     double total;
 
     MaterialSearchView searchView;
-    Fragment_Search fragment;
+    Fragment_Search fragmentSearch;
     Toolbar toolbar;
-
 
     SharedPreferences pref;
 
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         }
         super.onCreate(savedInstanceState);
 
-
+        listCart = new ArrayList<>();
         model_carts = new ArrayList<>();
         model_chat = new ArrayList<>();
 
@@ -226,6 +226,7 @@ public class MainActivity extends AppCompatActivity
         lp.height = heightLcl;
         lp.gravity = Gravity.CENTER;
         dialog_cart.getWindow().setAttributes(lp);
+        Adapter_Cart.isOrder = false;
         dialog_cart.show();
         btnOrder = dialog_cart.findViewById(R.id.btnOrder);
         tvTotal = dialog_cart.findViewById(R.id.tvTotalCart);
@@ -242,6 +243,7 @@ public class MainActivity extends AppCompatActivity
         }
         adapter_cart = new Adapter_Cart(dialog_cart.getContext(), model_carts);
         lvCart.setAdapter(adapter_cart);
+        x = 0;
         for (int i = 0; i < model_carts.size(); i++) {
             total = model_carts.get(i).getGia() * model_carts.get(i).getSl_cart();
             x += total;
@@ -261,10 +263,11 @@ public class MainActivity extends AppCompatActivity
                 if (!isLogin) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 } else {
+                    listCart.addAll(model_carts);
                     dialog_cart.dismiss();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
-                    setTitle("Thanh Toán");
-
+                    navigationView.setCheckedItem(R.id.nav_home);
+                    setTitle("Thanh toán");
                 }
             }
         });
@@ -276,28 +279,28 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String text) {
-                fragment = (Fragment_Search) getSupportFragmentManager().findFragmentByTag("FragmentSearch");
+                fragmentSearch = (Fragment_Search) getSupportFragmentManager().findFragmentByTag("FragmentSearch");
                 if (text != null && !text.isEmpty()) {
                     List<Model_SP> list = new ArrayList<>();
                     for (Model_SP item : Fragment_Search.model) {
-                        if (item.getName().toLowerCase().contains(text)||item.getName().toLowerCase().contains(text.toLowerCase())) {
+                        if (item.getName().toLowerCase().contains(text) || item.getName().toLowerCase().contains(text.toLowerCase())) {
                             list.add(item);
-                            fragment.IsFound(true);
+                            fragmentSearch.IsFound(true);
                         }
                     }
-                    if (list.isEmpty()){
-                        fragment.IsFound(false);
+                    if (list.isEmpty()) {
+                        fragmentSearch.IsFound(false);
                     }
-                    fragment.SetAdapter(list);
+                    fragmentSearch.SetAdapter(list);
                 } else {
-                    if(!Fragment_Search.isLoad){
-                        fragment.SetAdapter(Fragment_Search.model);
-                        fragment.IsFound(true);
+                    if (!Fragment_Search.isLoad) {
+                        fragmentSearch.SetAdapter(Fragment_Search.model);
+                        fragmentSearch.IsFound(true);
                     }
                 }
                 return true;
@@ -306,9 +309,9 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
-                fragment = new Fragment_Search();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, "FragmentSearch").commit();
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentSearch = new Fragment_Search();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragmentSearch, "FragmentSearch").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSearch).commit();
                 setTitle("Tìm kiếm");
                 toolbar.setVisibility(View.GONE);
             }

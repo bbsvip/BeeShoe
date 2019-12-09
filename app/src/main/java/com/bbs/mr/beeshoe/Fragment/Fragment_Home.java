@@ -54,6 +54,9 @@ public class Fragment_Home extends Fragment {
     List<Model_SP> listNam;
     List<Model_SP> listNu;
     List<Model_SP> listSandal;
+    List<Model_SP> modelNam;
+    List<Model_SP> modelNu;
+    List<Model_SP> modelSandal;
     RecyclerView rcvNam;
     RecyclerView rcvNu;
     RecyclerView rcvSandal;
@@ -81,6 +84,9 @@ public class Fragment_Home extends Fragment {
         listNam = new ArrayList<>();
         listNu = new ArrayList<>();
         listSandal = new ArrayList<>();
+        modelNam = new ArrayList<>();
+        modelNu = new ArrayList<>();
+        modelSandal = new ArrayList<>();
         prgNam = view.findViewById(R.id.prgRvNam);
         prgNu = view.findViewById(R.id.prgRvNu);
         prgSandal = view.findViewById(R.id.prgRvSandal);
@@ -93,9 +99,9 @@ public class Fragment_Home extends Fragment {
         rcvNam.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
         rcvNu.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
         rcvSandal.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
-        adapterNam = new Adapter_SP(getContext(), listNam);
-        adapterNu = new Adapter_SP(getContext(), listNu);
-        adapterSandal = new Adapter_SP(getContext(), listSandal);
+        adapterNam = new Adapter_SP(getContext(), modelNam);
+        adapterNu = new Adapter_SP(getContext(), modelNu);
+        adapterSandal = new Adapter_SP(getContext(), modelSandal);
         WaitForLoad();
         rcvNam.setAdapter(adapterNam);
         rcvNu.setAdapter(adapterNu);
@@ -280,6 +286,21 @@ public class Fragment_Home extends Fragment {
                         return Integer.valueOf(obj2.getCount_click()).compareTo(Integer.valueOf(obj1.getCount_click())); // To compare integer values
                     }
                 });
+                if (!listNam.isEmpty()){
+                    for (int i =0;i<10;i++){
+                        modelNam.add(listNam.get(i));
+                    }
+                }
+                if (!listNu.isEmpty()){
+                    for (int i =0;i<10;i++){
+                        modelNu.add(listNu.get(i));
+                    }
+                }
+                if (!listSandal.isEmpty()){
+                    for (int i =0;i<10;i++){
+                        modelSandal.add(listSandal.get(i));
+                    }
+                }
 
                 isLoad = false;
                 adapterNam.notifyDataSetChanged();

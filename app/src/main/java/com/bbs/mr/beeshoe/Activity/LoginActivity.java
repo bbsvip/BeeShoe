@@ -186,7 +186,8 @@ public class LoginActivity extends AppCompatActivity {
     public void setSave(String id,String name,String email,String date,String address) {
         SharedPreferences pref = getSharedPreferences("USER", MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString("ID", id);
+        edit.putInt("ID", Integer.valueOf(id));
+        edit.putString("USER", u);
         edit.putString("NAME", name);
         edit.putString("EMAIL", email);
         edit.putString("DATE", date);

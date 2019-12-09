@@ -54,4 +54,8 @@
     <string name="tvAccOrder">Các sản phẩm đã mua</string>
     <string name="search">Tìm kiếm</string>
     <string name="notFound">Không tìm thấy sản phẩm bạn yêu cầu!</string>
+    <string name="tvOrder">Nhập thông tin người nhận</string>
+    <string name="save">Lưu</string>
+    <string name="UNameOrder">Tên người nhận</string>
+    <string name="phone">Số điện thoại</string>
 </resources>

@@ -41,7 +41,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater inflater;
     private TextView tvName, tvInfo, tvPrice, tvGiaGoc;
     private RatingBar rtb;
-    private Button btnAddCart, btnBuy, btnBack;
+    private Button btnAddCart, btnBack;
     private ListView lvAllPic, lvCmt;
     private ImageView img_info;
     private String[] all_pic;
@@ -116,7 +116,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }.start();
         btnBack = dialog.findViewById(R.id.btnBackInfoSp);
         btnAddCart = dialog.findViewById(R.id.btn_info_add_cart);
-        btnBuy = dialog.findViewById(R.id.btn_info_buy);
         lvAllPic = dialog.findViewById(R.id.lv_info_all_pic);
         lvCmt = dialog.findViewById(R.id.lv_cmt);
         img_info = dialog.findViewById(R.id.img_info_sp);
@@ -173,12 +172,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 OnClickAdd(urlImg,model.getName(),model.getGia());
             }
         });
-        btnBuy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Buy", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 
@@ -206,7 +199,7 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public TextView name, gia, tv_sale, gia_goc;
         public ImageView thumbnail;
-        public Button btn_add, btn_mua;
+        public Button btn_add;
         public RatingBar rating;
 
 
@@ -216,7 +209,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             gia = view.findViewById(R.id.tv_gia_sp);
             thumbnail = view.findViewById(R.id.img_sp);
             btn_add = view.findViewById(R.id.btn_them_gio_hang);
-            btn_mua = view.findViewById(R.id.btn_mua_ngay);
             rating = view.findViewById(R.id.rating);
             tv_sale = view.findViewById(R.id.tv_sale);
             gia_goc = view.findViewById(R.id.tv_gia_goc_sp);
@@ -262,12 +254,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.thumbnail.setMaxWidth(200);
         }
 
-        holder.btn_mua.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                OnClickBuy();
-            }
-        });
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {

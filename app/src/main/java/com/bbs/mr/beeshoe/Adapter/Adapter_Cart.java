@@ -31,6 +31,7 @@ public class Adapter_Cart extends BaseAdapter {
 
     Context context;
     List<Model_Cart> model;
+    public static boolean isOrder = true;
 
     public Adapter_Cart(Context context, List<Model_Cart> model) {
         this.context = context;
@@ -78,10 +79,16 @@ public class Adapter_Cart extends BaseAdapter {
         } else {
             Picasso.get().load("https://firebasestorage.googleapis.com/v0/b/datn-4ec75.appspot.com/o/other_image%2Ferror.png?alt=media&token=1ffa3591-6b4c-4dd7-8a47-ba4ac6605f8f").into(holder.img);
         }
-        if (model.get(position).getSl_cart() == 0) {
-            holder.tru.setEnabled(false);
+        if (isOrder){
+            holder.tru.setVisibility(View.GONE);
+            holder.cong.setVisibility(View.GONE);
         } else {
-            holder.tru.setEnabled(true);
+            holder.cong.setVisibility(View.VISIBLE);
+            if (model.get(position).getSl_cart() == 0) {
+                holder.tru.setVisibility(View.GONE);
+            } else {
+                holder.tru.setVisibility(View.VISIBLE);
+            }
         }
         holder.cong.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +119,5 @@ public class Adapter_Cart extends BaseAdapter {
         ImageView img;
         TextView name, gia, sl;
         Button cong, tru;
-
     }
 }

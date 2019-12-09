@@ -131,31 +131,14 @@
                         android:id="@+id/btn_them_gio_hang"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
                         android:background="@drawable/borrder"
                         android:fontFamily="sans-serif"
-                        android:text="+Giỏ hàng"
+                        android:text="@string/addCart"
                         android:textAlignment="center"
                         android:textAllCaps="false"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="10sp" />
 
-                    <View
-                        android:layout_width="5dp"
-                        android:layout_height="match_parent" />
-
-                    <Button
-                        android:id="@+id/btn_mua_ngay"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/borrder"
-                        android:fontFamily="sans-serif"
-                        android:text="Mua ngay"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="@color/colorPrimaryDark"
-                        android:textSize="10sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
