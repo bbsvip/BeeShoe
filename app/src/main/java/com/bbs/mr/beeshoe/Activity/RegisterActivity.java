@@ -129,7 +129,9 @@ public class RegisterActivity extends AppCompatActivity {
                 return Priority.IMMEDIATE;
             }
         };
+        stringRequest.setShouldCache(false);
         RequestQueue request = Volley.newRequestQueue(RegisterActivity.this);
+        request.getCache().remove(url);
         request.add(stringRequest);
     }
 

@@ -9,6 +9,7 @@ package com.bbs.mr.beeshoe.Fragment;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,7 +22,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -40,6 +43,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -53,11 +57,15 @@ public class Fragment_Order extends Fragment {
     public static List<Model_Cart> model;
     Adapter_Cart adapter;
     DecimalFormat df;
+    ProgressBar prg;
 
     EditText name, email, address, phone;
     Button save, back;
     boolean haveAddress = false;
     String user;
+    boolean isPay = false;
+    int count = 0;
+    CountDownTimer countDown;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -66,7 +74,7 @@ public class Fragment_Order extends Fragment {
 
         haveAddress = false;
         pref = getActivity().getSharedPreferences("USER", MODE_PRIVATE);
-        user = String.valueOf(pref.getString("USER",""));
+        user = String.valueOf(pref.getString("USER", ""));
         btnPay = view.findViewById(R.id.btnPay);
         tvTotal = view.findViewById(R.id.tvTotalPay);
         lvPay = view.findViewById(R.id.lvOrder);
@@ -75,6 +83,8 @@ public class Fragment_Order extends Fragment {
         model.clear();
         model.addAll(MainActivity.listCart);
         df = new DecimalFormat("#,###");
+        prg = view.findViewById(R.id.prg_Order);
+        prg.setVisibility(View.GONE);
         int x = 0;
         double total = 0;
         for (int i = 0; i < model.size(); i++) {
@@ -91,8 +101,9 @@ public class Fragment_Order extends Fragment {
                     DialogInputAddress();
                 } else {
                     for (int i = 0; i < model.size(); i++) {
-                        Pay(model.get(i).getName(),model.get(i).getImg(),String.valueOf(model.get(i).getGia()),String.valueOf(model.get(i).getSl_cart()));
+                        Pay(model.get(i).getName(), model.get(i).getImg(), String.valueOf(model.get(i).getGia()), String.valueOf(model.get(i).getSl_cart()));
                     }
+                    WaitForLoad();
                 }
             }
         });
@@ -145,12 +156,14 @@ public class Fragment_Order extends Fragment {
     }
 
     private void Pay(final String name_sp, final String img, final String gia_sp, final String sl_sp) {
+        count = 0;
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.e("cccc     ", "onResponse: "+response );
+                Log.e("cccc     ", "onResponse: " + response);
                 if (response.equals("success")) {
-                    //isRegisted = true;
+                    count++;
+                    isPay = true;
                 }
             }
         }, new Response.ErrorListener() {
@@ -166,6 +179,7 @@ public class Fragment_Order extends Fragment {
                 params.put("user_name", pref.getString("NAME", ""));
                 params.put("user_email", pref.getString("EMAIL", ""));
                 params.put("user_phone", pref.getString("PHONE", ""));
+                params.put("user_address", pref.getString("ADDRESS", ""));
                 params.put("name_sp", name_sp);
                 params.put("img", img);
                 params.put("gia_sp", gia_sp);
@@ -175,11 +189,38 @@ public class Fragment_Order extends Fragment {
 
             @Override
             public Request.Priority getPriority() {
-                return Priority.IMMEDIATE;
+                return Priority.HIGH;
             }
         };
+        stringRequest.setShouldCache(false);
         RequestQueue request = Volley.newRequestQueue(getContext());
+        request.getCache().remove(url);
         request.add(stringRequest);
+    }
+
+    private void WaitForLoad() {
+        countDown = new CountDownTimer(5000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                prg.setVisibility(View.VISIBLE);
+                btnPay.setVisibility(View.GONE);
+                if (isPay) {
+                    cancel();
+                    onFinish();
+                }
+            }
+
+            public void onFinish() {
+                prg.setVisibility(View.GONE);
+                btnPay.setVisibility(View.VISIBLE);
+                if (isPay) {
+                    if (count == model.size()) {
+                        Toast.makeText(getContext(), "Đã gửi đơn hàng!", Toast.LENGTH_SHORT).show();
+                        ((MainActivity) Objects.requireNonNull(getActivity())).Home();
+                    }
+                }
+            }
+        }.start();
     }
 }
 
