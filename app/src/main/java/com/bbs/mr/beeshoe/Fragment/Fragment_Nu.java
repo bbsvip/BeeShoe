@@ -309,6 +309,8 @@ public class Fragment_Nu extends Fragment {
                     }
                 }
         );
+        array.setShouldCache(false);
+        request.getCache().clear();
         request.add(array);
     }
 

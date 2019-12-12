@@ -307,6 +307,8 @@ public class Fragment_Sandal extends Fragment  {
                     }
                 }
         );
+        array.setShouldCache(false);
+        request.getCache().clear();
         request.add(array);
     }
 

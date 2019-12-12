@@ -313,6 +313,8 @@ public class Fragment_Nam extends Fragment {
                     }
                 }
         );
+        array.setShouldCache(false);
+        request.getCache().clear();
         request.add(array);
     }
 
