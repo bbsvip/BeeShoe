@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     //TextView tvCountCart ;
     boolean fisrtBack = false;
     boolean fabHide = false;
-    FloatingActionButton fabCart, fabChat;
+    FloatingActionButton fabCart, fabChat, fab;
 
     ArrayList<Model_Chat> model_chat;
     Adapter_Chat adapter_chat;
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity
     Fragment_Search fragmentSearch;
     Toolbar toolbar;
 
+    Fragment_Order fragmentOrder;
     SharedPreferences pref;
 
     @Override
@@ -127,7 +128,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         pref = getSharedPreferences("USER", MODE_PRIVATE);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fabCart = findViewById(R.id.fabCart);
         fabChat = findViewById(R.id.fabChat);
         fabCart.setOnClickListener(new View.OnClickListener() {
@@ -260,14 +261,20 @@ public class MainActivity extends AppCompatActivity
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                fragmentOrder = new Fragment_Order();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragmentOrder, "FragmentOrder").commit();
                 if (!isLogin) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 } else {
+                    listCart.clear();
                     listCart.addAll(model_carts);
                     dialog_cart.dismiss();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Order()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentOrder).commit();
                     navigationView.setCheckedItem(R.id.nav_home);
+                    fragmentOrder = (Fragment_Order) getSupportFragmentManager().findFragmentByTag("FragmentOrder");
+                    Fragment_Order.model.clear();
                     setTitle("Thanh toán");
+                    fabCart.setClickable(false);
                 }
             }
         });
@@ -314,6 +321,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentSearch).commit();
                 setTitle("Tìm kiếm");
                 toolbar.setVisibility(View.GONE);
+                fabCart.setClickable(true);
             }
 
             @Override
@@ -322,6 +330,7 @@ public class MainActivity extends AppCompatActivity
                 navigationView.setCheckedItem(R.id.nav_home);
                 setTitle("Trang chủ");
                 toolbar.setVisibility(View.VISIBLE);
+                fabCart.setClickable(true);
             }
         });
     }
@@ -389,6 +398,7 @@ public class MainActivity extends AppCompatActivity
                             if (isLogin) {
                                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Account()).commit();
                                 setTitle("Tài khoản");
+                                fab.hide();
                             } else {
                                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
                             }
@@ -460,31 +470,40 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Home()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
         setTitle("Trang chủ");
-
+        fab.show();
+        fabCart.setClickable(true);
     }
 
     public void GiayNam() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nam()).commit();
         navigationView.setCheckedItem(R.id.nav_nam);
         setTitle("Giày nam");
+        fab.show();
+        fabCart.setClickable(true);
     }
 
     public void GiayNu() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nu()).commit();
         navigationView.setCheckedItem(R.id.nav_nu);
         setTitle("Giày nữ");
+        fab.show();
+        fabCart.setClickable(true);
     }
 
     public void Sandal() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Sandal()).commit();
         navigationView.setCheckedItem(R.id.nav_sandal);
         setTitle("Sandal - Dép");
+        fab.show();
+        fabCart.setClickable(true);
     }
 
     public void Other() {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Other()).commit();
         navigationView.setCheckedItem(R.id.nav_other);
         setTitle("Phụ kiện khác");
+        fab.show();
+        fabCart.setClickable(true);
     }
 
     public void AddCart(String img, String name, double gia) {

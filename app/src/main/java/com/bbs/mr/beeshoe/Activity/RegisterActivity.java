@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
     boolean isRegisted = false;
     ProgressBar prg;
     CountDownTimer countDown;
-    String u;
+    String u, p, rp, e, n;
 
 
     @Override
@@ -82,11 +82,19 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.btnRegisterRe:
-                u = user.getText().toString(); String p = pass.getText().toString();
-                if (u.isEmpty()) {
-                    Toast.makeText(this, "Chưa nhập email !", Toast.LENGTH_SHORT).show();
-                } else if (p.isEmpty()) {
-                    Toast.makeText(this, "Chưa nhập mật khẩu !", Toast.LENGTH_SHORT).show();
+                u = user.getText().toString();
+                p = pass.getText().toString();
+                rp = repass.getText().toString();
+                e = email.getText().toString();
+                n = name.getText().toString();
+                if (u.isEmpty() || p.isEmpty() || rp.isEmpty() || e.isEmpty() || n.isEmpty()) {
+                    Toast.makeText(this, "Xin nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                } else if (u.length() < 6 || p.length()<6){
+                    Toast.makeText(this, "Tên đăng nhập và mật khẩu phải nhiều hơn 6 ký tự!", Toast.LENGTH_SHORT).show();
+                } else if (!p.equals(rp)){
+                    Toast.makeText(this, "Mật khẩu không khớp!", Toast.LENGTH_SHORT).show();
+                }else if (n.length() <4 || e.length()<7) {
+                    Toast.makeText(this, "Xin nhập đúng thông tin!", Toast.LENGTH_SHORT).show();
                 } else {
                     Register();
                     WaitForLoad();
@@ -105,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                 prg.setVisibility(View.VISIBLE);
                 login.setVisibility(View.GONE);
                 register.setVisibility(View.GONE);
-                if (response.equals("success")){
+                if (response.equals("success")) {
                     isRegisted = true;
                 }
             }
@@ -114,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.e("clclclclclclc         ", "onErrorResponse: " + error.getMessage());
             }
-        }){
+        }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 HashMap<String, String> params = new HashMap<>();
@@ -124,6 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
                 params.put("user_email", email.getText().toString());
                 return params;
             }
+
             @Override
             public Priority getPriority() {
                 return Priority.IMMEDIATE;
@@ -204,6 +213,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onPause();
         unregisterReceiver(checkInternet);
     }
+
     private void WaitForLoad() {
         countDown = new CountDownTimer(5000, 1000) {
 

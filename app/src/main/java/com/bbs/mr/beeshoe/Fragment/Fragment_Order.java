@@ -66,6 +66,7 @@ public class Fragment_Order extends Fragment {
     boolean isPay = false;
     int count = 0;
     CountDownTimer countDown;
+    String n, e, a, p;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -80,8 +81,7 @@ public class Fragment_Order extends Fragment {
         lvPay = view.findViewById(R.id.lvOrder);
         model = new ArrayList<>();
         Adapter_Cart.isOrder = true;
-        model.clear();
-        model.addAll(MainActivity.listCart);
+        ResetList();
         df = new DecimalFormat("#,###");
         prg = view.findViewById(R.id.prg_Order);
         prg.setVisibility(View.GONE);
@@ -112,7 +112,14 @@ public class Fragment_Order extends Fragment {
         return view;
     }
 
+    public void ResetList(){
+        model.clear();
+        if (model.isEmpty()){
+            model.addAll(MainActivity.listCart);
+        }
+    }
     private void DialogInputAddress() {
+        n = e = a = p = "";
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_order);
@@ -143,14 +150,22 @@ public class Fragment_Order extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor edit = pref.edit();
-                edit.putString("NAME", name.getText().toString());
-                edit.putString("EMAIL", email.getText().toString());
-                edit.putString("PHONE", phone.getText().toString());
-                edit.putString("ADDRESS", address.getText().toString());
-                edit.commit();
-                dialog.dismiss();
-                haveAddress = true;
+                n = name.getText().toString();
+                e = email.getText().toString();
+                a = address.getText().toString();
+                p = phone.getText().toString();
+                if (n.isEmpty() || e.isEmpty() || a.isEmpty() || p.isEmpty() || n.length() < 3 || e.length() < 7 || a.length() < 10 || p.length() < 10) {
+                    Toast.makeText(getContext(), "Hãy nhập đầy đủ và đúng!", Toast.LENGTH_SHORT).show();
+                }else {
+                    SharedPreferences.Editor edit = pref.edit();
+                    edit.putString("NAME", name.getText().toString());
+                    edit.putString("EMAIL", email.getText().toString());
+                    edit.putString("PHONE", phone.getText().toString());
+                    edit.putString("ADDRESS", address.getText().toString());
+                    edit.commit();
+                    dialog.dismiss();
+                    haveAddress = true;
+                }
             }
         });
     }
@@ -221,6 +236,18 @@ public class Fragment_Order extends Fragment {
                 }
             }
         }.start();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ResetList();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ResetList();
     }
 }
 
