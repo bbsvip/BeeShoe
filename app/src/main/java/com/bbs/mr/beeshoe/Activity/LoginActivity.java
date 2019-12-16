@@ -103,6 +103,7 @@ public class LoginActivity extends AppCompatActivity {
                     //Boolean chk = db.checkLogin(u, p);
                     Check(u, p);
                     WaitForLoad();
+                    rememberUser(u, p, chk.isChecked());
                 }
                 break;
             case R.id.btnRegister:
@@ -267,7 +268,6 @@ public class LoginActivity extends AppCompatActivity {
                 login.setVisibility(View.GONE);
                 if (chkAcc) {
                     Toast.makeText(getApplicationContext(), "Xin chào "+userName, Toast.LENGTH_SHORT).show();
-                    rememberUser(u, p, chk.isChecked());
                     setSave(idUser,userName,userEmail,userDate,userAddress);
                     MainActivity.isLogin = true;
                     cancel();

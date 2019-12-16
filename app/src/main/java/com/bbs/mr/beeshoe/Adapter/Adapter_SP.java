@@ -181,10 +181,6 @@ public class Adapter_SP extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void OnClickBuy() {
-        Toast.makeText(context, "Mua ngay .....", Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public int getItemCount() {
         return list == null ? 0 : list.size();
