@@ -272,7 +272,6 @@ public class MainActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentOrder).commit();
                     navigationView.setCheckedItem(R.id.nav_home);
                     fragmentOrder = (Fragment_Order) getSupportFragmentManager().findFragmentByTag("FragmentOrder");
-                    Fragment_Order.model.clear();
                     setTitle("Thanh toán");
                     fabCart.setClickable(false);
                 }
