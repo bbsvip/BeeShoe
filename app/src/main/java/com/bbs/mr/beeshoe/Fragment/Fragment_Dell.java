@@ -50,44 +50,37 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class Fragment_Nu extends Fragment {
+public class Fragment_Dell extends Fragment {
 
-    //String url = "http://hoadondientuquynhon.com/getAll.php";
-    String url = "https://datnbbs.000webhostapp.com/getAll.php";
-
-    private int sex = 2;
-    private int pointType = 7;
-    CountDownTimer countDown;
-    private boolean isLoad = true;
-    private ProgressBar prg;
-
-    private Spinner spn, spn_gia;
     private static final String[] muc = {
             "Tất cả",
-            "Giày Comfort",
-            "Giày Cao Gót",
-            "Giày Đế Xuồng",
-            "Giày Dây",
-            "Giày Sneaker Nữ"};
+            "Inspiron",
+            "G Series",
+            "XPS"};
     private static final String[] gia = {
             "Phổ biến",
             "Giá: thấp - cao",
             "Giá: cao - thấp",};
-
+    String url = "https://datnbbs.000webhostapp.com/getAll.php";
+    CountDownTimer countDown;
+    boolean isLoading = false;
+    boolean over = false;
+    private int sex = 1;
+    private int pointType = 0;
+    private boolean isLoad = true;
+    private ProgressBar prg;
+    private Spinner spn, spn_gia;
     private RecyclerView recyclerView;
     private Adapter_SP adapter;
     private List<Model_SP> model;
     private List<Model_SP> list;
     private List<Model_SP> listSex;
     private List<Model_SP> listType;
-    boolean isLoading = false;
-    boolean over = false;
-
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.giay_nu, container, false);
+        View view = inflater.inflate(R.layout.acer, container, false);
         spn = view.findViewById(R.id.spn_nu);
         spn_gia = view.findViewById(R.id.spn_nu_gia);
 
@@ -211,40 +204,6 @@ public class Fragment_Nu extends Fragment {
 
     }
 
-    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
-
-        private int spanCount;
-        private int spacing;
-        private boolean includeEdge;
-
-        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
-            this.spanCount = spanCount;
-            this.spacing = spacing;
-            this.includeEdge = includeEdge;
-        }
-
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            int position = parent.getChildAdapterPosition(view); // item position
-            int column = position % spanCount; // item column
-
-            if (includeEdge) {
-                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-                if (position < spanCount) { // top edge
-                    outRect.top = spacing;
-                }
-                outRect.bottom = spacing; // item bottom
-            } else {
-                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-                if (position >= spanCount) {
-                    outRect.top = spacing; // item top
-                }
-            }
-        }
-
-    }
-
     /**
      * Converting dp to pixel
      */
@@ -327,7 +286,7 @@ public class Fragment_Nu extends Fragment {
 
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
 
-                if (!over){
+                if (!over) {
                     if (!isLoading) {
                         if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == model.size() - 1) {
                             //bottom of list!
@@ -408,5 +367,39 @@ public class Fragment_Nu extends Fragment {
                 recyclerView.setVisibility(View.VISIBLE);
             }
         }.start();
+    }
+
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
+
     }
 }

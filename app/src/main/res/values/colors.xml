@@ -6,7 +6,7 @@
 <!-- Phone: 0347079556 -->
 
 <resources>
-    <color name="colorPrimary">#ffd900</color>
+    <color name="colorPrimary">#0B4BA7</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#000000</color>
     <color name="primary_material_dark">#3e3e3e</color>

@@ -121,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="Giày nam nổi bật"
+                        android:text="Máy Dell nổi bât"
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -167,7 +167,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="Giày nữ nổi bật"
+                        android:text="Máy Acer nổi bật"
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -213,7 +213,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="Sandal-dép nổi bật"
+                        android:text="Máy Lenovo nổi bật"
                         android:textColor="@color/colorPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold" />

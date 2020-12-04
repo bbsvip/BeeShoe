@@ -1,18 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2019. -->
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (c) 2019. -->
 <!-- Tạo bởi Cừu Đen -->
 <!-- -->
 <!-- Gmail: 0331999bbs@gmail.com -->
 <!-- Phone: 0347079556 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/Theme.AppCompat"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.SplashActivity"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    android:theme="@style/Theme.AppCompat"
+    tools:context=".Activity.SplashActivity">
 
 
     <ImageView
@@ -20,25 +19,8 @@
         android:layout_height="200dp"
         android:src="@drawable/beebee" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="serif"
-        android:text="Bee Bee"
-        android:textColor="#ffd900"
-        android:textSize="36sp"
-        android:textStyle="bold|italic" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:text="Nâng niu bàn chân Việt"
-        android:textColor="#ffd900"
-        android:textSize="18sp"
-        android:textStyle="italic" />
     <ProgressBar
+        android:id="@+id/prgSplash"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/prgSplash"/>
+        android:layout_height="wrap_content" />
 </LinearLayout>

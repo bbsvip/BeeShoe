@@ -21,8 +21,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -49,11 +47,11 @@ import com.bbs.mr.beeshoe.Adapter.Adapter_Chat;
 import com.bbs.mr.beeshoe.AutoChat;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Account;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Home;
-import com.bbs.mr.beeshoe.Fragment.Fragment_Nam;
-import com.bbs.mr.beeshoe.Fragment.Fragment_Nu;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Dell;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Acer;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Order;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Other;
-import com.bbs.mr.beeshoe.Fragment.Fragment_Sandal;
+import com.bbs.mr.beeshoe.Fragment.Fragment_Lenovo;
 import com.bbs.mr.beeshoe.Fragment.Fragment_Search;
 import com.bbs.mr.beeshoe.Model.Model_Cart;
 import com.bbs.mr.beeshoe.Model.Model_Chat;
@@ -474,7 +472,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void GiayNam() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nam()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Dell()).commit();
         navigationView.setCheckedItem(R.id.nav_nam);
         setTitle("Giày nam");
         fab.show();
@@ -482,7 +480,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void GiayNu() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Nu()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Acer()).commit();
         navigationView.setCheckedItem(R.id.nav_nu);
         setTitle("Giày nữ");
         fab.show();
@@ -490,7 +488,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void Sandal() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Sandal()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_Lenovo()).commit();
         navigationView.setCheckedItem(R.id.nav_sandal);
         setTitle("Sandal - Dép");
         fab.show();

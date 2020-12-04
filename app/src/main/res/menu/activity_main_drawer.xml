@@ -17,15 +17,15 @@
         <item
             android:id="@+id/nav_nam"
             android:icon="@drawable/ic_giay_nam"
-            android:title="GIÀY NAM" />
+            android:title="Dell" />
         <item
             android:id="@+id/nav_nu"
             android:icon="@drawable/ic_giay_nu"
-            android:title="GIÀY NỮ" />
+            android:title="Acer" />
         <item
             android:id="@+id/nav_sandal"
             android:icon="@drawable/ic_sandal"
-            android:title="SANDAL - DÉP" />
+            android:title="Lenovo" />
         <item
             android:id="@+id/nav_other"
             android:icon="@drawable/ic_more_horiz_black_24dp"
